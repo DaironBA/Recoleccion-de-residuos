@@ -1,0 +1,16 @@
+{
+  "id": "id",
+  "name": "nombre",
+  "address": "dirección",
+  "email": "correo electrónico",
+  "phone": "teléfono",
+  "age": "edad",
+  "password": "contraseña",
+  "totalPoints": "puntos totales",
+  "documentNumber": "número de documento",
+  "documentType": "tipo de documento",
+  "roleId": "id de rol",
+  "createdAt": "fecha de creación",
+  "updatedAt": "fecha de actualización",
+  "deletedAt": "fecha de eliminación"
+}
