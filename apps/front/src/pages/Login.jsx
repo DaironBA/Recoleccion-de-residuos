@@ -2,7 +2,7 @@ import InputText from "../components/InputText";
 import { useNavigate } from "react-router-dom";
 import Img from "../components/Img";
 import { Link } from "react-router";
-import { Eye, EyeOff, Lock } from "lucide-react";
+import { Eye, EyeOff, Lock, User } from "lucide-react";
 import { useState } from "react";
 import LoginLayout from "../components/LoginLAyout";
 
@@ -26,6 +26,7 @@ function Login() {
               id="email"
               name="email"
               placeholder="Ingrese su correo electrónico"
+              startIcon={User}
               required={false}
             />
             <InputText 

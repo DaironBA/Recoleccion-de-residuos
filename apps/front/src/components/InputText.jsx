@@ -14,11 +14,11 @@ function InputText({ className, ...props }) {
     return (
         <div className={`flex flex-col gap-2 ${className}`}>
             <label htmlFor={props.id} className="block text-sm font-semibold">{props.label}{props.required && <span >*</span>} </label>
-            <div className={`flex items-center border border-gray-300 rounded-xl p-2 w-full h-10 ${isFocused ? 'border-gray-700 outline-none' : 'border-gray-300'}`}>
+            <div className={`relative flex items-center border border-gray-300 rounded-xl w-full h-10 overflow-hidden ${isFocused ? 'border-gray-700 outline-none' : 'border-gray-300'}`}>
                 {/* Ícono al inicio */}
-                {props.startIcon && <props.startIcon className={`text-gray-700 aspect-square h-full mr-2 ${props.onStartIconClick ? 'cursor-pointer' : ''}`} onClick={props.onStartIconClick} />}
+                {props.startIcon && <props.startIcon className={`absolute left-2 text-gray-700 aspect-square h-full mr-2 ${props.onStartIconClick ? 'cursor-pointer' : ''}`} onClick={props.onStartIconClick} />}
                 <input
-                    className='flex-1 w-full h-10 outline-none'
+                    className={`flex-1 w-full h-10 outline-none ${props.startIcon ? 'pl-10' : ''} ${props.endIcon ? 'pr-10' : ''}`}
                     type={props.type}
                     id={props.id}
                     name={props.name}
@@ -27,7 +27,7 @@ function InputText({ className, ...props }) {
                     onFocus={handleFocus}  // Cuando el input obtiene el foco
                     onBlur={handleBlur}    // Cuando el input pierde el foco
                 />
-                {props.endIcon && <props.endIcon className={`text-gray-700 aspect-square h-full ml-2 ${props.onEndIconClick ? 'cursor-pointer' : ''}`} onClick={props.onEndIconClick} />}
+                {props.endIcon && <props.endIcon className={`absolute right-2 text-gray-700 aspect-square h-full ml-2 ${props.onEndIconClick ? 'cursor-pointer' : ''}`} onClick={props.onEndIconClick} />}
             </div>
         </div>
     );
