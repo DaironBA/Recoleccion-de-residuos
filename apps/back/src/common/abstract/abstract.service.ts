@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { Repository, Not } from 'typeorm';
+import { Repository, Not, ILike } from 'typeorm';
 import { fieldsTranslation } from 'src/common/helpers/fields-translation';
 import { AbstractEntity } from './abstract.entity'; // Asegúrate de que esté correctamente importada
 import { InjectRepository } from '@nestjs/typeorm';
@@ -18,8 +18,24 @@ export abstract class AbstractService<T extends AbstractEntity, CreateDto extend
   }
 
   // Obtener todos los registros
-  async findAll(): Promise<T[]> {
-    return this.repository.find();
+  async findAll(params: any): Promise<T[]> {
+    const filters = this.buildFilters(params);
+    return this.repository.find({ where: filters });
+  }
+
+  buildFilters(params: any): any {
+    const filters: any = {};
+    for (const key in params) {
+      if (params[key] !== undefined && params[key] !== null) {
+        if(key.includes('[ilike]')) {
+          const field = key.replace('[ilike]', '');
+          filters[field] = ILike(`%${params[key]}%`);
+        }else {
+          filters[key] = params[key];
+        }
+      }
+    }
+    return filters;
   }
 
   // Buscar un registro por ID

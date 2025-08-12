@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsNumber, IsNumberString, IsOptional, IsString } from "class-validator";
+import { IsEmail, IsNotEmpty, IsNumber, IsNumberString, IsOptional, IsString, minLength, MinLength } from "class-validator";
 import { generateMessage, MessagesEnum } from "src/common/enums/messages.enum";
 import { TranslationsFilesEnum } from "src/common/enums/translations-files.enum";
 import { fieldsTranslation } from "src/common/helpers/fields-translation";
@@ -23,6 +23,7 @@ export class CreateUserDto {
 
     @IsString({message: generateMessage(MessagesEnum.INVALID_STRING, {field: fieldsTranslation(TranslationsFilesEnum.USER_FIELDS, 'password')})})
     @IsNotEmpty({message: generateMessage(MessagesEnum.EMPTY_FIELD, {field: fieldsTranslation(TranslationsFilesEnum.USER_FIELDS, 'password')})})
+    @MinLength(8, {message: generateMessage(MessagesEnum.MIN_LENGTH, {field: fieldsTranslation(TranslationsFilesEnum.USER_FIELDS, 'password'), minLength: '8'})})
     password: string;
 
     @IsNumber({}, {message: generateMessage(MessagesEnum.INVALID_NUMBER, {field: fieldsTranslation(TranslationsFilesEnum.USER_FIELDS, 'age')})})

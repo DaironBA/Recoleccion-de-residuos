@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, Query } from '@nestjs/common';
 import { AbstractEntity } from './abstract.entity';
 import { AbstractService } from './abstract.service';
 
@@ -12,8 +12,8 @@ export abstract class AbstractController <T extends AbstractEntity, CreateDto ex
   }
 
   @Get()
-  findAll() {
-    return this.abstractService.findAll();
+  findAll(@Query() query: any) {
+    return this.abstractService.findAll(query);
   }
 
   @Get(':id')

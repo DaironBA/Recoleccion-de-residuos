@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users/users.module';
 import { SnakeNamingStrategy } from './common/helpers/snake-naming-strategy';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { SnakeNamingStrategy } from './common/helpers/snake-naming-strategy';
       namingStrategy: new SnakeNamingStrategy(),
     }),
     UsersModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
