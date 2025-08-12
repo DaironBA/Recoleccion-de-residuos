@@ -5,11 +5,68 @@ import { Link } from "react-router";
 import { Eye, EyeOff, Lock, User } from "lucide-react";
 import { useState } from "react";
 import LoginLayout from "../components/LoginLAyout";
+import AuthService from "../services/authService";
+import { useDispatch } from "react-redux";
+import { setUser } from "../redux/actions/userActions";
 
 function Login() {
+  // Imports
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const authService = new AuthService();
+
+  // State
   const [showIcon, setShowIcon] = useState(EyeOff);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  // Variables
   const image = <Img src="images/login.png" alt="Login" />;
+
+  // Functions
+
+const validateForm = () => {
+    let isValid = true;
+
+    console.log(email, password)
+    // Email Validation
+    if (!email) {
+      setEmailError("El correo electrónico es obligatorio.");
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      setEmailError("Por favor, ingresa un correo electrónico válido.");
+      isValid = false;
+    } else {
+      setEmailError("");
+    }
+
+    // Password Validation
+    if (!password) {
+      setPasswordError("La contraseña es obligatoria.");
+      isValid = false;
+    } else if (password.length < 8) {
+      setPasswordError("La contraseña debe tener al menos 6 caracteres.");
+      isValid = false;
+    } else {
+      setPasswordError("");
+    }
+
+    return isValid;
+  };
+
+  const handleLogin = async () => {
+    if (!validateForm()) return;
+    const user = await authService.login({ email: email, password: password });
+
+    if (user) {
+      dispatch(setUser(user));
+      navigate("/");
+    }else {
+      console.log("Error al iniciar sesión");
+    }
+  };
 
   const handleEndIconClick = () => {
     setShowIcon(showIcon === EyeOff ? Eye : EyeOff);
@@ -20,26 +77,36 @@ function Login() {
     <LoginLayout image={image} imagePhrase="Pequeñas acciones grandes cambios">
       <h1 className="text-3xl font-bold text-center mb-10">Inicio de sesión</h1>
           <form action="" className='flex flex-col gap-8 pr-8'>
-            <InputText 
-              type="email"
-              label="Correo electrónico"
-              id="email"
-              name="email"
-              placeholder="Ingrese su correo electrónico"
-              startIcon={User}
-              required={false}
-            />
-            <InputText 
-              type={showIcon === Eye ? "text" : "password"}
-              label="Contraseña"
-              id="password"
-              name="password"
-              placeholder="Ingrese su contraseña"
-              startIcon={Lock}
-              endIcon={showIcon}
-              onEndIconClick={handleEndIconClick} 
-              required={false}
-            />
+            <div className="">
+              <InputText 
+                type="email"
+                label="Correo electrónico"
+                id="email"
+                name="email"
+                placeholder="Ingrese su correo electrónico"
+                startIcon={User}
+                required={false}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              {emailError && <p className="text-red-500 text-xs">{emailError}</p>}
+            </div>
+            <div className="">
+              <InputText 
+                type={showIcon === Eye ? "text" : "password"}
+                label="Contraseña"
+                id="password"
+                name="password"
+                placeholder="Ingrese su contraseña"
+                startIcon={Lock}
+                endIcon={showIcon}
+                onEndIconClick={handleEndIconClick} 
+                required={false}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            {passwordError && <p className="text-red-500 text-xs">{passwordError}</p>}
+            </div>
           </form>
           <div className="mt-4">
             <Link to="/register">
@@ -50,7 +117,7 @@ function Login() {
             </Link>
           </div>
           <div className="mx-auto">
-            <button onClick={() => {navigate("/")}} className="bg-black text-white text-xs py-4 mt-8 w-60 cursor-pointer hover:bg-black/80">Iniciar sesión</button>
+            <button onClick={handleLogin} className="bg-black text-white text-xs py-4 mt-8 w-60 cursor-pointer hover:bg-black/80">Iniciar sesión</button>
           </div>
     </LoginLayout>
   );

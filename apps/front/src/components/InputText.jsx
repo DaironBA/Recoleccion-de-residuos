@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function InputText({ className, ...props }) {
+function InputText({ onChange, className, ...props }) {
     const [isFocused, setIsFocused] = useState(false);
 
     // Funciones para manejar el enfoque y desenfoque
@@ -26,6 +26,7 @@ function InputText({ className, ...props }) {
                     required={props.required}
                     onFocus={handleFocus}  // Cuando el input obtiene el foco
                     onBlur={handleBlur}    // Cuando el input pierde el foco
+                    onChange={onChange}
                 />
                 {props.endIcon && <props.endIcon className={`absolute right-2 text-gray-700 aspect-square h-full ml-2 ${props.onEndIconClick ? 'cursor-pointer' : ''}`} onClick={props.onEndIconClick} />}
             </div>
