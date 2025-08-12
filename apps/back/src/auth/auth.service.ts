@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, NotFoundException, UnauthorizedExcepti
 import { UsersService } from 'src/users/users/users.service';
 import * as bcryptjs from 'bcryptjs';
 import { LoginDto } from './dto/login.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +20,11 @@ export class AuthService {
         if (!isPasswordValid) {
             throw new UnauthorizedException('Contraseña incorrecta');
         }
-        return 'Login exitoso';
+
+        const payload = { email: user.email, sub: user.id };
+        const token = await this.jwtService.signAsync(payload);
+
+        return { access_token: token };
     }
 
 }
