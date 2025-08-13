@@ -30,7 +30,6 @@ function Login() {
 const validateForm = () => {
     let isValid = true;
 
-    console.log(email, password)
     // Email Validation
     if (!email) {
       setEmailError("El correo electrónico es obligatorio.");
@@ -47,7 +46,7 @@ const validateForm = () => {
       setPasswordError("La contraseña es obligatoria.");
       isValid = false;
     } else if (password.length < 8) {
-      setPasswordError("La contraseña debe tener al menos 6 caracteres.");
+      setPasswordError("La contraseña debe tener al menos 8 caracteres.");
       isValid = false;
     } else {
       setPasswordError("");
@@ -56,7 +55,8 @@ const validateForm = () => {
     return isValid;
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
     if (!validateForm()) return;
     const user = await authService.login({ email: email, password: password });
 
@@ -76,49 +76,52 @@ const validateForm = () => {
 
     <LoginLayout image={image} imagePhrase="Pequeñas acciones grandes cambios">
       <h1 className="text-3xl font-bold text-center mb-10">Inicio de sesión</h1>
-          <form action="" className='flex flex-col gap-8 pr-8'>
-            <div className="">
-              <InputText 
-                type="email"
-                label="Correo electrónico"
-                id="email"
-                name="email"
-                placeholder="Ingrese su correo electrónico"
-                startIcon={User}
-                required={false}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              {emailError && <p className="text-red-500 text-xs">{emailError}</p>}
+          <form className='flex flex-col pr-8'  onSubmit={handleLogin}>
+            <div className="flex flex-col gap-8">
+
+              <div className="">
+                <InputText 
+                  type="email"
+                  label="Correo electrónico"
+                  id="email"
+                  name="email"
+                  placeholder="Ingrese su correo electrónico"
+                  startIcon={User}
+                  required={false}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                {emailError && <p className="text-red-500 text-xs">{emailError}</p>}
+              </div>
+              <div className="">
+                <InputText 
+                  type={showIcon === Eye ? "text" : "password"}
+                  label="Contraseña"
+                  id="password"
+                  name="password"
+                  placeholder="Ingrese su contraseña"
+                  startIcon={Lock}
+                  endIcon={showIcon}
+                  onEndIconClick={handleEndIconClick} 
+                  required={false}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              {passwordError && <p className="text-red-500 text-xs">{passwordError}</p>}
+              </div>
             </div>
-            <div className="">
-              <InputText 
-                type={showIcon === Eye ? "text" : "password"}
-                label="Contraseña"
-                id="password"
-                name="password"
-                placeholder="Ingrese su contraseña"
-                startIcon={Lock}
-                endIcon={showIcon}
-                onEndIconClick={handleEndIconClick} 
-                required={false}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            {passwordError && <p className="text-red-500 text-xs">{passwordError}</p>}
+            <div className="mt-4">
+              <Link to="/register">
+                <p className="text-xs mb-2">¿No tienes una cuenta? <u>Regístrate aquí</u></p>
+              </Link>
+              <Link to="/forgot-password">
+                <p className="text-xs underline">¿Olvidaste tu contraseña?</p>
+              </Link>
+            </div>
+            <div className="max-w-60 w-[80%] pr-4 md:pr-0 mx-auto">
+              <button type="submit" className="bg-black text-white text-xs py-4 mt-8 w-full cursor-pointer hover:bg-black/80">Iniciar sesión</button>
             </div>
           </form>
-          <div className="mt-4">
-            <Link to="/register">
-              <p className="text-xs mb-2">¿No tienes una cuenta? <u>Regístrate aquí</u></p>
-            </Link>
-            <Link to="/forgot-password">
-              <p className="text-xs underline">¿Olvidaste tu contraseña?</p>
-            </Link>
-          </div>
-          <div className="mx-auto">
-            <button onClick={handleLogin} className="bg-black text-white text-xs py-4 mt-8 w-60 cursor-pointer hover:bg-black/80">Iniciar sesión</button>
-          </div>
     </LoginLayout>
   );
 }

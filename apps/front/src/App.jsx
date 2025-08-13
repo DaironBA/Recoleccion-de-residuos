@@ -1,25 +1,20 @@
 import { BrowserRouter, Route, Routes } from "react-router"
-import Home from "./pages/Home"
-import Login from "./pages/Login"
-import Register from "./pages/register"
-import ForgotPassword from "./pages/ForgotPassword"
 import { Provider } from "react-redux"
 import store from "./redux/store"
+import useAuth from "./hooks/useAuth"
+import RouteConfig from "./routes"
 
 function App() {
   return (
     <>
     <Provider store={store}>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} /> 
-          <Route path="/forgot-password" element={<ForgotPassword />} /> 
-        </Routes>
+        <RouteConfig/>
       </BrowserRouter>
     </Provider>
     </>
   )
 }
+
+
 export default App

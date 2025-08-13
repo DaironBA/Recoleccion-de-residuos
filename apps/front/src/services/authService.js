@@ -1,3 +1,4 @@
+import { useDispatch } from "react-redux";
 import { logoutUser } from "../redux/actions/userActions";
 import AbstractService from "./abstractService";
 
@@ -10,10 +11,9 @@ class AuthService extends AbstractService {
         return response.user;
     }
 
-    logout = () => {
+    logout = (dispatch) => {
         dispatch(logoutUser());
         localStorage.removeItem('authToken');
-        history.push('/login');
     };
 
 }

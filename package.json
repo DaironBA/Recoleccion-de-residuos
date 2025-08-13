@@ -29,6 +29,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "dotenv": "^17.2.1",
+    "jwt-decode": "^4.0.0",
     "lucide-react": "^0.539.0",
     "mysql2": "^3.14.3",
     "react": "^19.1.1",

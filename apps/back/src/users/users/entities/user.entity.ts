@@ -1,6 +1,7 @@
 
 import { AbstractEntity } from "src/common/abstract/abstract.entity";
 import { Column, Entity } from "typeorm";
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -19,6 +20,7 @@ export class User extends AbstractEntity {
     @Column({ type: 'numeric' })
     age: number;
 
+    @Exclude()
     @Column()
     password: string;
 

@@ -1,10 +1,10 @@
 // abstractService.js
 class AbstractService {
-  constructor(baseUrl = null) {
+  constructor(baseUrl = '') {
     if (this.constructor === AbstractService) {
       throw new Error("Cannot instantiate an abstract class.");
     }
-    this.baseUrl = baseUrl ? baseUrl : '/api';
+    this.baseUrl = '/api' + baseUrl;
   }
 
   getAuthToken() {
