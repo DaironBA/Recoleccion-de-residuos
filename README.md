@@ -1,4 +1,4 @@
-# Recolección de resiuos
+# Recolección de residuos
 
 Este proyecto es un mono repositorio usando turbo, el cual se compone por una aplicación en React y otra en nestJS. Sigue estos pasos para configurarlo y ejecutarlo en tu máquina local.
 
