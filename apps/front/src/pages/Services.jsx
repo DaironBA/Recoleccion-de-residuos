@@ -1,4 +1,5 @@
 import Nav from "../components/Nav"
+import Footer from "../components/footer";
 
 function Services() {
     return (
@@ -7,6 +8,7 @@ function Services() {
             <div>
                 <h1>Services page</h1>
             </div>
+            <Footer />
         </>
     );
 }

@@ -1,5 +1,5 @@
 import Nav from "../components/Nav"
-
+import Footer from "../components/footer";
 function About() {
     return (
         <>
@@ -7,6 +7,7 @@ function About() {
             <div>
                 <h1>About Page</h1>
             </div>
+            <Footer />
         </>
     );
 }

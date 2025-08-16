@@ -8,6 +8,8 @@ import LoginLayout from "../components/LoginLAyout";
 import AuthService from "../services/authService";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/actions/userActions";
+import Footer from "../components/footer";
+import Nav from "../components/Nav"
 
 function Login() {
   // Imports
@@ -73,57 +75,67 @@ const validateForm = () => {
   };
 
   return (
+  <>
+    <Nav />
 
     <LoginLayout image={image} imagePhrase="Pequeñas acciones grandes cambios">
       <h1 className="text-3xl font-bold text-center mb-10">Inicio de sesión</h1>
-          <form className='flex flex-col pr-8'  onSubmit={handleLogin}>
-            <div className="flex flex-col gap-8">
+      <form className="flex flex-col pr-8" onSubmit={handleLogin}>
+        <div className="flex flex-col gap-8">
+          <div>
+            <InputText 
+              type="email"
+              label="Correo electrónico"
+              id="email"
+              name="email"
+              placeholder="Ingrese su correo electrónico"
+              startIcon={User}
+              required={false}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            {emailError && <p className="text-red-500 text-xs">{emailError}</p>}
+          </div>
 
-              <div className="">
-                <InputText 
-                  type="email"
-                  label="Correo electrónico"
-                  id="email"
-                  name="email"
-                  placeholder="Ingrese su correo electrónico"
-                  startIcon={User}
-                  required={false}
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                {emailError && <p className="text-red-500 text-xs">{emailError}</p>}
-              </div>
-              <div className="">
-                <InputText 
-                  type={showIcon === Eye ? "text" : "password"}
-                  label="Contraseña"
-                  id="password"
-                  name="password"
-                  placeholder="Ingrese su contraseña"
-                  startIcon={Lock}
-                  endIcon={showIcon}
-                  onEndIconClick={handleEndIconClick} 
-                  required={false}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              {passwordError && <p className="text-red-500 text-xs">{passwordError}</p>}
-              </div>
-            </div>
-            <div className="mt-4">
-              <Link to="/register">
-                <p className="text-xs mb-2">¿No tienes una cuenta? <u>Regístrate aquí</u></p>
-              </Link>
-              <Link to="/forgot-password">
-                <p className="text-xs underline">¿Olvidaste tu contraseña?</p>
-              </Link>
-            </div>
-            <div className="max-w-60 w-[80%] pr-4 md:pr-0 mx-auto">
-              <button type="submit" className="bg-black text-white text-xs py-4 mt-8 w-full cursor-pointer hover:bg-black/80">Iniciar sesión</button>
-            </div>
-          </form>
+          <div>
+            <InputText 
+              type={showIcon === Eye ? "text" : "password"}
+              label="Contraseña"
+              id="password"
+              name="password"
+              placeholder="Ingrese su contraseña"
+              startIcon={Lock}
+              endIcon={showIcon}
+              onEndIconClick={handleEndIconClick}
+              required={false}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            {passwordError && <p className="text-red-500 text-xs">{passwordError}</p>}
+          </div>
+        </div>
+
+        <div className="mt-4">
+          <Link to="/register">
+            <p className="text-xs mb-2">¿No tienes una cuenta? <u>Regístrate aquí</u></p>
+          </Link>
+          <Link to="/forgot-password">
+            <p className="text-xs underline">¿Olvidaste tu contraseña?</p>
+          </Link>
+        </div>
+
+        <div className="max-w-60 w-[80%] pr-4 md:pr-0 mx-auto">
+          <button type="submit" className="bg-black text-white text-xs py-4 mt-8 w-full cursor-pointer hover:bg-black/80">
+            Iniciar sesión
+          </button>
+        </div>
+      </form>
     </LoginLayout>
-  );
+
+    <Footer />
+  </>
+);
+
 }
 
 export default Login;
