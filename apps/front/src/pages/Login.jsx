@@ -90,7 +90,7 @@ const validateForm = () => {
               name="email"
               placeholder="Ingrese su correo electrónico"
               startIcon={User}
-              required={false}
+              required={true}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -107,7 +107,7 @@ const validateForm = () => {
               startIcon={Lock}
               endIcon={showIcon}
               onEndIconClick={handleEndIconClick}
-              required={false}
+              required={true}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
