@@ -4,12 +4,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users/users.module';
 import { SnakeNamingStrategy } from './common/helpers/snake-naming-strategy';
 import { AuthModule } from './auth/auth.module';
-
+import { RecoleccionesModule } from './recolecciones/recolecciones.module';
 @Module({
   imports: [
+    
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '../../.env',
+      
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -24,6 +26,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     UsersModule,
     AuthModule,
+    RecoleccionesModule,
   ],
   controllers: [],
   providers: [],
