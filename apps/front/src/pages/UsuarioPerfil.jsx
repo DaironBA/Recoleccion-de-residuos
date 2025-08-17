@@ -111,52 +111,139 @@ function UsuarioPerfil() {
         </div>
 
         {/* Formulario */}
-        <div className="bg-gray-300 rounded-lg p-6 grid grid-cols-[1fr_2fr] gap-4 max-w-4xl">
-          <div className="flex flex-col gap-4">
-            {[
-              "NOMBRES Y APELLIDOS",
-              "TIPO DOCUMENTO",
-              "NÚMERO DOCUMENTO",
-              "EDAD",
-              "TELÉFONO",
-              "CORREO"
-            ].map((label, i) => (
-              <label key={i} className="text-xs font-semibold py-2 px-3 rounded bg-gray-200 text-gray-700">
-                {label}
+       
+          <div className="bg-gray-300 rounded-lg p-6 max-w-4xl mx-auto">
+            <div className="grid grid-cols-2 gap-x-6 gap-y-4 items-center">
+              {/* Nombres */}
+              <label className="text-sm font-semibold bg-gray-200 px-3 py-2 rounded text-gray-700">
+                NOMBRES Y APELLIDOS
               </label>
-            ))}
-          </div>
-
-          <div className="flex flex-col gap-4">
-            {[
-              { name: "nombres", type: "text" },
-              { name: "tipoDocumento", type: "text" },
-              { name: "numeroDocumento", type: "text" },
-              { name: "edad", type: "number", min: 1 },
-              { name: "telefono", type: "text" },
-              { name: "correo", type: "email" }
-            ].map(({ name, type, min }) => (
-              <div key={name} className="relative">
+              <div className="relative">
                 <input
-                  name={name}
-                  type={type}
-                  min={min}
-                  value={formData[name]}
+                  name="nombres"
+                  type="text"
+                  value={formData.nombres}
                   onChange={handleChange}
                   className="w-full p-2 rounded border border-gray-400 bg-gray-100 text-gray-700"
                 />
                 <button
                   type="button"
                   className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
-                  onClick={() => setFormData(prev => ({ ...prev, [name]: "" }))}
-                  aria-label={`Clear ${name} input`}
+                  onClick={() => setFormData(prev => ({ ...prev, nombres: "" }))}
                 >
                   ✖
                 </button>
               </div>
-            ))}
 
-            <div className="flex justify-between mt-6">
+              {/* Tipo documento */}
+              <label className="text-sm font-semibold bg-gray-200 px-3 py-2 rounded text-gray-700">
+                TIPO DOCUMENTO
+              </label>
+              <div className="relative">
+                <input
+                  name="tipoDocumento"
+                  type="text"
+                  value={formData.tipoDocumento}
+                  onChange={handleChange}
+                  className="w-full p-2 rounded border border-gray-400 bg-gray-100 text-gray-700"
+                />
+                <button
+                  type="button"
+                  className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
+                  onClick={() => setFormData(prev => ({ ...prev, tipoDocumento: "" }))}
+                >
+                  ✖
+                </button>
+              </div>
+
+              {/* Número documento */}
+              <label className="text-sm font-semibold bg-gray-200 px-3 py-2 rounded text-gray-700">
+                NÚMERO DOCUMENTO
+              </label>
+              <div className="relative">
+                <input
+                  name="numeroDocumento"
+                  type="text"
+                  value={formData.numeroDocumento}
+                  onChange={handleChange}
+                  className="w-full p-2 rounded border border-gray-400 bg-gray-100 text-gray-700"
+                />
+                <button
+                  type="button"
+                  className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
+                  onClick={() => setFormData(prev => ({ ...prev, numeroDocumento: "" }))}
+                >
+                  ✖
+                </button>
+              </div>
+
+              {/* Edad */}
+              <label className="text-sm font-semibold bg-gray-200 px-3 py-2 rounded text-gray-700">
+                EDAD
+              </label>
+              <div className="relative">
+                <input
+                  name="edad"
+                  type="number"
+                  min={1}
+                  value={formData.edad}
+                  onChange={handleChange}
+                  className="w-full p-2 rounded border border-gray-400 bg-gray-100 text-gray-700"
+                />
+                <button
+                  type="button"
+                  className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
+                  onClick={() => setFormData(prev => ({ ...prev, edad: "" }))}
+                >
+                  ✖
+                </button>
+              </div>
+
+              {/* Teléfono */}
+              <label className="text-sm font-semibold bg-gray-200 px-3 py-2 rounded text-gray-700">
+                TELÉFONO
+              </label>
+              <div className="relative">
+                <input
+                  name="telefono"
+                  type="text"
+                  value={formData.telefono}
+                  onChange={handleChange}
+                  className="w-full p-2 rounded border border-gray-400 bg-gray-100 text-gray-700"
+                />
+                <button
+                  type="button"
+                  className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
+                  onClick={() => setFormData(prev => ({ ...prev, telefono: "" }))}
+                >
+                  ✖
+                </button>
+              </div>
+
+              {/* Correo */}
+              <label className="text-sm font-semibold bg-gray-200 px-3 py-2 rounded text-gray-700">
+                CORREO
+              </label>
+              <div className="relative">
+                <input
+                  name="correo"
+                  type="email"
+                  value={formData.correo}
+                  onChange={handleChange}
+                  className="w-full p-2 rounded border border-gray-400 bg-gray-100 text-gray-700"
+                />
+                <button
+                  type="button"
+                  className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
+                  onClick={() => setFormData(prev => ({ ...prev, correo: "" }))}
+                >
+                  ✖
+                </button>
+              </div>
+            </div>
+
+            {/* Botones */}
+            <div className="flex justify-between mt-8">
               <button className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition duration-300 flex items-center gap-2">
                 ELIMINAR MI CUENTA 🗑️
               </button>
@@ -169,7 +256,7 @@ function UsuarioPerfil() {
               </button>
             </div>
           </div>
-        </div>
+
       </div>
       <Footer />
     </>

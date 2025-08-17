@@ -2,6 +2,8 @@
 import { AbstractEntity } from "src/common/abstract/abstract.entity";
 import { Column, Entity } from "typeorm";
 import { Exclude } from 'class-transformer';
+import { Recoleccion } from '../../../recolecciones/entities/recoleccion.entity';
+import { OneToMany } from 'typeorm';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -36,4 +38,6 @@ export class User extends AbstractEntity {
     @Column({ type: 'smallint', default: 1 })
     roleId: number;
 
+    @OneToMany(() => Recoleccion, reco => reco.usuario)
+    recolecciones: Recoleccion[];
 }
