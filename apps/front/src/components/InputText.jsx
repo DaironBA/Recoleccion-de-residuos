@@ -18,8 +18,8 @@ function InputText({ onChange, className, ...props }) {
                 {/* Ícono al inicio */}
                 {props.startIcon && <props.startIcon className={`absolute left-2 text-gray-700 aspect-square h-full mr-2 ${props.onStartIconClick ? 'cursor-pointer' : ''}`} onClick={props.onStartIconClick} />}
                 <input
-                    className={`flex-1 w-full h-10 outline-none ${props.startIcon ? 'pl-10' : ''} ${props.endIcon ? 'pr-10' : ''}`}
-                    type={props.type}
+                    className={`flex-1 w-full pl-2 h-10 outline-none ${props.startIcon ? 'pl-10' : ''} ${props.endIcon ? 'pr-10' : ''}`}
+                    type={props.type ?? 'text'}
                     id={props.id}
                     name={props.name}
                     placeholder={props.placeholder}
