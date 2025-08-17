@@ -8,6 +8,9 @@ import useAuth from '../hooks/useAuth';
 import Services from '../pages/Services';
 import About from '../pages/About';
 import Contact from '../pages/Contact';
+import UsuarioPerfil from "../pages/UsuarioPerfil";
+import UsuarioActividad from "../pages/UsuarioActividad";
+import UsuarioReporte from "../pages/UsuarioReporte";
 
 const routes = [
   { path: '/', element: <Home /> },
@@ -17,6 +20,9 @@ const routes = [
   { path: '/about', element: <About /> },
   { path: '/contact', element: <Contact /> },
   { path: '/forgot-password', element: <ForgotPassword /> },
+  { path: "/perfil", element: <UsuarioPerfil /> },
+  { path: "/actividad", element: <UsuarioActividad /> },
+  { path: "/reporte", element: <UsuarioReporte /> },
 ];
 
 const RouteConfig = () => {

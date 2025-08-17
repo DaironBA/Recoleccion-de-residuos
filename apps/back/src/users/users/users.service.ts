@@ -17,6 +17,16 @@ export class UsersService extends AbstractService<User, CreateUserDto, UpdateUse
     super(repository);
   }
 
+ async findOne(id: number): Promise<User> {
+  console.log('Buscando usuario con id:', id);
+  const user = await this.repository.findOneBy({ id });
+  if (!user) {
+    throw new Error(`Usuario con id ${id} no encontrado`);
+  }
+  console.log('Usuario encontrado:', user);
+  return user;
+}
+
   async create(createUserDto: CreateUserDto) {
     await this.validateInsertUser(createUserDto.email, createUserDto.documentNumber);
     createUserDto.password = await bcryptjs.hash(createUserDto.password, 10);
@@ -44,3 +54,5 @@ export class UsersService extends AbstractService<User, CreateUserDto, UpdateUse
   }
   
 }
+
+
