@@ -11,6 +11,7 @@ import Contact from '../pages/Contact';
 import UsuarioPerfil from "../pages/UsuarioPerfil";
 import UsuarioActividad from "../pages/UsuarioActividad";
 import UsuarioReporte from "../pages/UsuarioReporte";
+import Rutas from '../pages/Rutas';
 
 const routes = [
   { path: '/', element: <Home /> },
@@ -23,6 +24,7 @@ const routes = [
   { path: "/perfil", element: <UsuarioPerfil /> },
   { path: "/actividad", element: <UsuarioActividad /> },
   { path: "/reporte", element: <UsuarioReporte /> },
+  { path: "/rutas", element: <Rutas /> }
 ];
 
 const RouteConfig = () => {

@@ -4,7 +4,10 @@ import UserButton from "./UserButton";
 
 const navItems = [
   { path: "/", label: "Inicio" },
+  { path: "/actividad", label: "Actividad", roles: [1] },
+  { path: "/admin", label: "Administración", roles: [3] },
   { path: "/services", label: "Servicios" },
+  { path: "/rutas", label: "Rutas", roles: [2] },
   { path: "/about", label: "Sobre nosotros" },
   { path: "/contact", label: "Contáctenos" },
   { path: "/login", label: "Ingresar" },
@@ -22,6 +25,9 @@ function Nav() {
           {navItems.filter(item => {
             if (item.path === "/login") {
               return !user; // Show login if not logged in
+            }
+            if (item.roles) {
+              return user && item.roles.includes(user.roleId); // Show item if user has the required role
             }
             return true; // Show other items if logged in
           }).map((item) => (

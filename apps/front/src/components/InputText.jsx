@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { forwardRef, useImperativeHandle, useState } from "react";
 
-function InputText({ onChange, className, ...props }) {
+const InputText = forwardRef(({ className, required, validations, max, min, ...props }, ref) => {
+    // Validations = ['email']
     const [isFocused, setIsFocused] = useState(false);
+    const [error, setError] = useState("");
+    const [value, setValue] = useState("");
 
     // Funciones para manejar el enfoque y desenfoque
     const handleFocus = () => {
@@ -11,6 +14,59 @@ function InputText({ onChange, className, ...props }) {
     const handleBlur = () => {
         setIsFocused(false);
     };
+
+    const handleChange = (e) => {
+        const val = e.target.value;
+        setValue(val);
+    };
+
+    const runValidation = () => {
+        let isValid = true;
+        if (required) {
+            if (!value) {
+                setError("Este campo es obligatorio.");
+                isValid = false;
+            }else{
+            setError("");
+            }
+        }
+        if (max) {
+            if (value.length > max) {
+                setError(`Este campo debe tener como máximo ${max} caracteres.`);
+                isValid = false;
+            }else{
+                setError("");
+            }
+        }
+
+        if (min) {
+            if (value.length < min) {
+                setError(`Este campo debe tener como mínimo ${min} caracteres.`);
+                isValid = false;
+            }else {
+                setError("");
+            }
+        }
+        if (validations && validations.length > 0) {
+            validations.forEach((validation) => {
+                if (validation === 'email') {
+                    if (!/\S+@\S+\.\S+/.test(value)) {
+                        setError("Este campo debe ser un correo electrónico válido.");
+                        isValid = false;
+                    }else{
+                        setError("");
+                    }
+                }
+            });
+        }
+
+        return isValid;
+    };
+
+    useImperativeHandle(ref, () => ({
+        isValid: () => runValidation(value),
+        getValue: () => value,
+    }));
     return (
         <div className={`flex flex-col gap-2 ${className}`}>
             <label htmlFor={props.id} className="block text-sm font-semibold">{props.label}{props.required && <span >*</span>} </label>
@@ -23,15 +79,23 @@ function InputText({ onChange, className, ...props }) {
                     id={props.id}
                     name={props.name}
                     placeholder={props.placeholder}
-                    required={props.required}
+                    required={required}
                     onFocus={handleFocus}  // Cuando el input obtiene el foco
                     onBlur={handleBlur}    // Cuando el input pierde el foco
-                    onChange={onChange}
+                    onChange={handleChange}
+                    {...(max ? { maxLength: max } : {})}
+                    {...(min ? { minLength: min } : {})}
                 />
                 {props.endIcon && <props.endIcon className={`absolute right-2 text-gray-700 aspect-square h-full ml-2 ${props.onEndIconClick ? 'cursor-pointer' : ''}`} onClick={props.onEndIconClick} />}
+                {max && (
+                <div className="text-right text-xs text-gray-500">
+                    {value.length}/{max}
+                </div>
+                )}
             </div>
+            {error && <p className="text-red-500 text-xs">{error}</p>}
         </div>
     );
-}
+});
 
 export default InputText;

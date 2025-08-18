@@ -3,44 +3,41 @@ import Nav from "../components/Nav";
 import Footer from "../components/footer";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { useSelector } from "react-redux";
+import RecoleccionesService from "../services/recoleccionesService";
 
 function UsuarioReporte() {
   const [recolecciones, setRecolecciones] = useState([]);
   const [totalPuntos, setTotalPuntos] = useState(0);
   const [userName, setUserName] = useState("User Name");
+  const user = useSelector((state) => state.user.user);
+
+  // Service
+  const recoleccionesService = new RecoleccionesService()
+
+
+  async function fetchData() {
+    try {
+      const data = await recoleccionesService.get(`?userId=${user.id}`);
+
+      if (data.length > 0) {
+        setUserName(data[0].usuario.name);
+        setRecolecciones(data);
+
+        const total = data.reduce((acc, rec) => acc + rec.puntos, 0);
+        setTotalPuntos(total);
+      }
+    } catch (error) {
+    }
+  }
 
   useEffect(() => {
-
-
-       // Código para usar el usuario logueado, por ahora comentado:
-    /*
-    const loggedUserId = localStorage.getItem("userId");
-    if (loggedUserId) {
-      setUserId(loggedUserId);
-    } else {
-      console.warn("Usuario no autenticado");
-      
+    if (user && user.id) { // Verifica que 'user' no sea null y que 'user.id' esté disponible
+      fetchData();
     }
-    */
+  }, [user]); // Dependencia en 'user' para que se ejecute cada vez que 'user' cambie
 
-    async function fetchData() {
-      try {
-        const res = await fetch("http://localhost:3000/api/recolecciones?userId=1");
-        const data = await res.json();
 
-        if (data.length > 0) {
-          setUserName(data[0].usuario.name);
-          setRecolecciones(data);
-
-          const total = data.reduce((acc, rec) => acc + rec.puntos, 0);
-          setTotalPuntos(total);
-        }
-      } catch (error) {
-        console.error("Error al cargar recolecciones:", error);
-      }
-    }
-    fetchData();
-  }, []);
 
   function exportToExcel() {
     const formattedData = recolecciones.map((item) => ({

@@ -8,8 +8,32 @@
     --color-extra-default: #96A9AA;
     --color-quaternary-default: #EAD9D3;
     --color-opaque-gray: #D9D9D9;
+    --color-success: #2ABC45;
 }
 
 * {
     font-family: 'inter', sans-serif;
+}
+
+/* Aparece la barra de desplazamiento pero sin fondo */
+::-webkit-scrollbar {
+  width: 8px; /* Controla el grosor de la barra de desplazamiento */
+}
+
+/* Track de la barra (donde se mueve el pulgar) */
+::-webkit-scrollbar-track {
+  background: transparent; /* Fondo transparente */
+}
+
+/* Pulgar de la barra de desplazamiento (la parte que se mueve) */
+::-webkit-scrollbar-thumb {
+  background: #888; /* Color del pulgar */
+  border-radius: 10px; /* Bordes redondeados del pulgar */
+}
+::-webkit-scrollbar:horizontal {
+  height: 8px; /* Controlar el tamaño de la barra horizontal */
+}
+
+::-webkit-scrollbar-track:horizontal {
+  background: transparent;
 }

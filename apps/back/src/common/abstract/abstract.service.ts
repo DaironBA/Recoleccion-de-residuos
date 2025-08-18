@@ -5,7 +5,11 @@ import { AbstractEntity } from './abstract.entity'; // Asegúrate de que esté c
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
-export abstract class AbstractService<T extends AbstractEntity, CreateDto extends Partial<T>, UpdateDto extends Partial<T>> {
+export abstract class AbstractService<
+  T extends AbstractEntity,
+  CreateDto extends Partial<T> = Partial<T>,
+  UpdateDto extends Partial<T> = Partial<T>
+> {
 
   constructor(
     @InjectRepository(AbstractEntity) protected repository: Repository<T>,

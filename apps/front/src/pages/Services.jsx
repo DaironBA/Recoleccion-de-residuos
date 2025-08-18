@@ -1,7 +1,9 @@
 import Nav from "../components/Nav";
 import Footer from "../components/footer";
+import { changeTitle } from "../utils/changeTitle";
 
 function Services() {
+  changeTitle('Servicios | Recolección de Residuos');
   return (
     <>
       <Nav />
