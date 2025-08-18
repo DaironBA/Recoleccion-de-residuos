@@ -4,6 +4,7 @@ import { Column, Entity } from "typeorm";
 import { Exclude } from 'class-transformer';
 import { Recoleccion } from '../../../recolecciones/entities/recoleccion.entity';
 import { OneToMany } from 'typeorm';
+import { CollectionRequest } from "src/collection-request/entities/collection-request.entity";
 
 @Entity()
 export class User extends AbstractEntity {
@@ -40,4 +41,7 @@ export class User extends AbstractEntity {
 
     @OneToMany(() => Recoleccion, reco => reco.usuario)
     recolecciones: Recoleccion[];
+
+    @OneToMany(() => CollectionRequest, collectionRequest => collectionRequest.user)
+    collectionRequests: CollectionRequest[];
 }

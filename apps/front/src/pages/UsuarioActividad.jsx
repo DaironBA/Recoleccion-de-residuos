@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
 import Nav from "../components/Nav";
 import Footer from "../components/footer";
+import { useSelector } from "react-redux";
 
 function UsuarioActividad() {
+
+  const user = useSelector((state) => state.user.user);
+ 
   const [puntos, setPuntos] = useState(0);
   const [recolecciones, setRecolecciones] = useState(0);
   const [kilos, setKilos] = useState(0);
@@ -13,16 +17,17 @@ function UsuarioActividad() {
   });
 
   useEffect(() => {
+    if (!user) return;
     // Aquí luego se conectará con el backend
-    setPuntos(1250);
-    setRecolecciones(3);
-    setKilos(45.7);
+    setPuntos(user.totalPoints);
+    setRecolecciones(user.collectionCount ?? 0);
+    setKilos(user.recycledKilos ?? 0);
     setProximasFechas({
       organicos: "Miércoles, 15 de Noviembre",
       inorganicos: "Viernes, 17 de Noviembre",
       peligrosos: "Lunes, 27 de Noviembre",
     });
-  }, []);
+  }, [user]);
 
   return (
     <>

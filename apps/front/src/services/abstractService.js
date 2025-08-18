@@ -24,7 +24,7 @@ class AbstractService {
         return headers;
     }
 
-  async get(endpoint) {
+  async get(endpoint = '') {
     try {
       const response = await fetch(`${this.baseUrl}${endpoint}`, {
         headers: this.getHeaders(),

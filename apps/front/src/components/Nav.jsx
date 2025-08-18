@@ -31,6 +31,9 @@ function Nav() {
               // Mostrar "Ingresar" solo si NO hay usuario y no estamos en rutas a ocultar
               return !user && !shouldHideLogin;
             }
+             if (item.roles) {
+              return user && item.roles.includes(user.roleId); // Show item if user has the required role
+            }
             return true;
           }).map((item) => (
             <li

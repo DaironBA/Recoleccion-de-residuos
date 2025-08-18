@@ -172,7 +172,7 @@ function Register() {
               </button>
             </div>
           </form>
-      <Alert message={message} onClose={handleCloseAlert} show={showAlert} type={alertType} onClose={onCloseAlert} />
+      <Alert message={message} onClose={handleCloseAlert} show={showAlert} type={alertType} />
       </LoginLayout>
       <Footer />
     </>

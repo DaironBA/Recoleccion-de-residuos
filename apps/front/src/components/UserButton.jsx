@@ -9,7 +9,7 @@ const UserProfile = ({ user }) => {
     const navigate = useNavigate();
     
     const userActions = [
-        { label: "Mi perfil", onClick: () => navigate('/perfil')  },
+        { label: "Mi perfil", onClick: () => navigate('/perfil/'+user.id)  },
         { label: "Mi reporte", onClick: () => navigate('/reporte') , roles: [1] },
         { label: "Cerrar sesión", onClick: () => handleSignOut() },
     ];

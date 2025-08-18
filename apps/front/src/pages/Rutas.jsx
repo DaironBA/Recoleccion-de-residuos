@@ -1,18 +1,27 @@
+import { useEffect, useState } from "react";
 import Footer from "../components/footer";
 import Img from "../components/Img";
 import Nav from "../components/Nav";
 import { getWasteStatusLabel, wasteStatus } from "../enums/wasteStatus.enum";
 import { getWasteTypeLabel } from "../enums/wasteType.enum";
+import CollectionRequestService from "../services/collectionRequestService";
 
 function Rutas() {
 
-    const routes = [
-        { address: 'Calle 10 #20-30', type: 3, status: 1 },
-        { address: 'Calle 10 #20-30', type: 3, status: 2 },
-        { address: 'Calle 10 #20-30', type: 3, status: 2 },
-        { address: 'Calle 10 #20-30', type: 3, status: 1 },
-        { address: 'Calle 10 #20-30', type: 3, status: 2 },
-    ]
+    const [routes, setRoutes] = useState([]);
+
+    const collectionRequestService = new CollectionRequestService();
+
+    const fetchRoutes = () => {
+        collectionRequestService.get().then(data => {
+            console.log(data)
+            setRoutes(data);
+        });
+    }
+
+    useEffect(() => {
+        fetchRoutes();
+    }, []);
 
     return (
         <>
@@ -40,7 +49,7 @@ function Rutas() {
                                         <div className="border-b border-gray-400 text-xs flex justify-between items-center gap-2 pb-1">
                                             <div className="">
                                                 <h3>Turno {index} - {route.address}</h3>
-                                                <p>Tipo: {getWasteTypeLabel(route.type)}</p>
+                                                <p>Tipo: {getWasteTypeLabel(route.wasteType)}</p>
                                             </div>
                                             <div className={`px-4 py-2 rounded-xl text-white ${route.status === wasteStatus.PENDIENTE ? 'bg-yellow-500' : 'bg-success'}`}>
                                                 {getWasteStatusLabel(route.status)}
