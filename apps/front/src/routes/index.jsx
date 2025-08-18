@@ -20,7 +20,7 @@ const routes = [
   { path: '/about', element: <About /> },
   { path: '/contact', element: <Contact /> },
   { path: '/forgot-password', element: <ForgotPassword /> },
-  { path: "/perfil", element: <UsuarioPerfil /> },
+  { path: "/perfil/:userId", element: <UsuarioPerfil /> },
   { path: "/actividad", element: <UsuarioActividad /> },
   { path: "/reporte", element: <UsuarioReporte /> },
 ];
