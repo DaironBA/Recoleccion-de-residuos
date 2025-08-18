@@ -21,7 +21,7 @@ const useAuth = () => {
           }else {
             const user = (await userService.get('', {
               id: decodedToken.id,
-              relations: ['recolecciones']
+              relations: ['recolecciones,collectionRequests']
             }))[0]
             dispatch(setUser(user));
           }

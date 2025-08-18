@@ -10,7 +10,10 @@ export class Recoleccion {
   tipo: string;
 
   @Column()
-  fecha: string;
+  fecha: Date;
+
+  @Column()
+  kilos: number;
 
   @Column()
   puntos: number;

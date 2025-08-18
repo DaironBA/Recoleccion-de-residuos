@@ -4,6 +4,7 @@ import Footer from "../components/footer";
 import { useSelector } from "react-redux";
 import CollectionRequest from "../components/CollectionRequest";
 import { wasteTypeEnum } from "../enums/wasteType.enum";
+import { formatDateToSpanish } from "../utils/formatDate";
 
 function UsuarioActividad() {
 
@@ -24,13 +25,45 @@ function UsuarioActividad() {
   useEffect(() => {
     if (!user) return;
     // Aquí luego se conectará con el backend
+    const recoleccionesUsuario = user.recolecciones;
+    const collectionRequests = user.collectionRequests || [];
+    const currentDate = new Date();
+
+    // Función para obtener la próxima colección de un tipo específico
+    const getNextCollection = (wasteType) => {
+      const filteredRequests = collectionRequests.filter(request => {
+        const requestDate = new Date(request.date);
+        return request.wasteType === wasteType && requestDate > currentDate;
+      });
+
+      // Ordenar por fecha ascendente (más cercana primero)
+      return filteredRequests.sort((a, b) => new Date(a.date) - new Date(b.date))[0];
+    };
+
+    // Obtener la próxima colección de tipo 1, tipo 2 y tipo 3
+    const proximoOrganico = getNextCollection(wasteTypeEnum.ORGANICO);
+    const proximoReciclable = getNextCollection(wasteTypeEnum.RECICLABLE);
+    const proximoPeligroso = getNextCollection(wasteTypeEnum.PELIGROSO);
+
+    const fechaActual = new Date();
+    const mesActual = fechaActual.getMonth(); // 0 = Enero, 1 = Febrero, ..., 11 = Diciembre
+
+    // Filtrar recolecciones del mes actual
+    const recoleccionesDelMes = recoleccionesUsuario.filter(recoleccion => {
+      const fechaRecoleccion = new Date(recoleccion.fecha);
+      return fechaRecoleccion.getMonth() === mesActual;
+    });
+
+    const kilosMes = recoleccionesDelMes.reduce((total, recoleccion) => total + (recoleccion.kilos || 0), 0);
+
     setPuntos(user.totalPoints);
-    setRecolecciones(user.collectionCount ?? 0);
-    setKilos(user.recycledKilos ?? 0);
+    setRecolecciones(recoleccionesDelMes.length ?? 0);
+    setKilos(kilosMes ?? 0);
+
     setProximasFechas({
-      organicos: "Miércoles, 15 de Noviembre",
-      inorganicos: "Viernes, 17 de Noviembre",
-      peligrosos: "Lunes, 27 de Noviembre",
+      organicos: proximoOrganico ? formatDateToSpanish(proximoOrganico.date) : 'No se encontró una proxima',
+      inorganicos: proximoReciclable ? formatDateToSpanish(proximoReciclable.date) : 'No se encontró una proxima',
+      peligrosos: proximoPeligroso ? formatDateToSpanish(proximoPeligroso.date) : 'No se encontró una proxima',
     });
   }, [user]);
 
@@ -55,7 +88,7 @@ function UsuarioActividad() {
             <p className="text-xl font-bold">{recolecciones}</p>
           </div>
           <div className="bg-[color:var(--color-quaternary-default)] shadow rounded px-6 py-4 flex-1">
-            <p className="font-semibold">Kilos reciclados (Total):</p>
+            <p className="font-semibold">Kilos reciclados este mes (Total):</p>
             <p className="text-xl font-bold">{kilos}</p>
           </div>
         </div>
