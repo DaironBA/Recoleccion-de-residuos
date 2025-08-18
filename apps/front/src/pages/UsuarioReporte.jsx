@@ -4,12 +4,14 @@ import Footer from "../components/footer";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function UsuarioReporte() {
   const navigate = useNavigate();
   const [inputUserId, setInputUserId] = useState(() => {
     return localStorage.getItem("userId") || "1";
   });
+  const user = useSelector((state) => state.user.user);
 
   const [recolecciones, setRecolecciones] = useState([]);
   const [totalPuntos, setTotalPuntos] = useState(0);
@@ -17,24 +19,12 @@ function UsuarioReporte() {
 
   async function fetchData() {
     try {
-      localStorage.setItem("userId", inputUserId);
+      const data = user.recolecciones;
 
-      const res = await fetch(`http://localhost:3000/api/recolecciones?userId=${inputUserId}`);
-      const data = await res.json();
-
-      console.log("Datos recibidos:", data);
-
-      if (data.length > 0 && data[0].usuario) {
-        setUserName(data[0].usuario.name || "Sin nombre");
-        setRecolecciones(data);
-
-        const total = data.reduce((acc, rec) => acc + (rec.puntos || 0), 0);
-        setTotalPuntos(total);
-      } else {
-        setUserName("Usuario no encontrado");
-        setRecolecciones([]);
-        setTotalPuntos(0);
-      }
+      setUserName(user.name || "Sin nombre");
+      setTotalPuntos(user.totalPoints || 0);
+      setRecolecciones(user.recolecciones || []);
+     
     } catch (error) {
       console.error("Error al cargar recolecciones:", error);
       setUserName("Error al cargar datos");
@@ -44,8 +34,10 @@ function UsuarioReporte() {
   }
 
   useEffect(() => {
-    fetchData();
-  }, [inputUserId]);
+    if (user) {
+      fetchData();
+    }
+  }, [user]);
 
   function exportToExcel() {
     const formattedData = recolecciones.map((item) => ({

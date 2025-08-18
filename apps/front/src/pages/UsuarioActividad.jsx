@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import CollectionRequest from "../components/CollectionRequest";
 import { wasteTypeEnum } from "../enums/wasteType.enum";
 import { formatDateToSpanish } from "../utils/formatDate";
+import { wasteStatus } from "../enums/wasteStatus.enum";
 
 function UsuarioActividad() {
 
@@ -25,7 +26,7 @@ function UsuarioActividad() {
   useEffect(() => {
     if (!user) return;
     // Aquí luego se conectará con el backend
-    const recoleccionesUsuario = user.recolecciones;
+    const recoleccionesUsuario = user.recolecciones || [];
     const collectionRequests = user.collectionRequests || [];
     const currentDate = new Date();
 
@@ -33,6 +34,7 @@ function UsuarioActividad() {
     const getNextCollection = (wasteType) => {
       const filteredRequests = collectionRequests.filter(request => {
         const requestDate = new Date(request.date);
+        if (request.status === wasteStatus.COMPLETADO) return false;
         return request.wasteType === wasteType && requestDate > currentDate;
       });
 
@@ -47,7 +49,7 @@ function UsuarioActividad() {
 
     const fechaActual = new Date();
     const mesActual = fechaActual.getMonth(); // 0 = Enero, 1 = Febrero, ..., 11 = Diciembre
-
+    console.log(recoleccionesUsuario);
     // Filtrar recolecciones del mes actual
     const recoleccionesDelMes = recoleccionesUsuario.filter(recoleccion => {
       const fechaRecoleccion = new Date(recoleccion.fecha);
@@ -61,9 +63,9 @@ function UsuarioActividad() {
     setKilos(kilosMes ?? 0);
 
     setProximasFechas({
-      organicos: proximoOrganico ? formatDateToSpanish(proximoOrganico.date) : 'No se encontró una proxima',
-      inorganicos: proximoReciclable ? formatDateToSpanish(proximoReciclable.date) : 'No se encontró una proxima',
-      peligrosos: proximoPeligroso ? formatDateToSpanish(proximoPeligroso.date) : 'No se encontró una proxima',
+      organicos: proximoOrganico ? formatDateToSpanish(proximoOrganico.date) : 'No se encontró una proxima recolección',
+      inorganicos: proximoReciclable ? formatDateToSpanish(proximoReciclable.date) : 'No se encontró una proxima recolección',
+      peligrosos: proximoPeligroso ? formatDateToSpanish(proximoPeligroso.date) : 'No se encontró una proxima recolección',
     });
   }, [user]);
 

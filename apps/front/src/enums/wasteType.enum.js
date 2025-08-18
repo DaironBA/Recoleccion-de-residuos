@@ -11,7 +11,7 @@ export const getWasteTypeLabel = (wasteType) => {
         case 2:
             return "Peligroso";
         case 3:
-            return "Reciclable";
+            return "Inorgánico";
         default:
             return "Desconocido";
     }

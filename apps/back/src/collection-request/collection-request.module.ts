@@ -10,5 +10,6 @@ import { UsersModule } from 'src/users/users/users.module';
   imports: [TypeOrmModule.forFeature([CollectionRequest]), UsersModule],
   controllers: [CollectionRequestController],
   providers: [CollectionRequestService],
+  exports: [CollectionRequestService]
 })
 export class CollectionRequestModule {}

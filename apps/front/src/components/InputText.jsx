@@ -75,7 +75,7 @@ const InputText = forwardRef(({ className, required, validations, max, min, mdat
                 {/* Ícono al inicio */}
                 {props.startIcon && <props.startIcon className={`absolute left-2 text-gray-700 aspect-square h-full mr-2 ${props.onStartIconClick ? 'cursor-pointer' : ''}`} onClick={props.onStartIconClick} />}
                 <input
-                    className={`flex-1 w-full pl-2 h-10 outline-none ${props.startIcon ? 'pl-10' : ''} ${props.endIcon ? 'pr-10' : ''}`}
+                    className={`flex-1 w-full pl-2 h-10 outline-none ${props.startIcon ? 'pl-10' : ''} ${props.endIcon ? 'pr-10' : ''} ${props.readOnly ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'} ${error ? 'border-red-500' : ''}`}
                     type={props.type ?? 'text'}
                     id={props.id}
                     name={props.name}
@@ -85,6 +85,7 @@ const InputText = forwardRef(({ className, required, validations, max, min, mdat
                     onFocus={handleFocus}  // Cuando el input obtiene el foco
                     onBlur={handleBlur}    // Cuando el input pierde el foco
                     onChange={handleChange}
+                    readOnly={props.readOnly}
                     {...(max ? { maxLength: max } : {})}
                     {...(min ? { minLength: min } : {})}
                     {...(mdate ? { min: mdate } : {})}
