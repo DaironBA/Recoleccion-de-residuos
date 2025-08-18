@@ -14,26 +14,6 @@ function UsuarioReporte() {
   const [recolecciones, setRecolecciones] = useState([]);
   const [totalPuntos, setTotalPuntos] = useState(0);
   const [userName, setUserName] = useState("User Name");
-  const user = useSelector((state) => state.user.user);
-
-  // Service
-  const recoleccionesService = new RecoleccionesService()
-
-
-  async function fetchData() {
-    try {
-      const data = await recoleccionesService.get(`?userId=${user.id}`);
-
-      if (data.length > 0) {
-        setUserName(data[0].usuario.name);
-        setRecolecciones(data);
-
-        const total = data.reduce((acc, rec) => acc + rec.puntos, 0);
-        setTotalPuntos(total);
-      }
-    } catch (error) {
-    }
-  }
 
   async function fetchData() {
     try {
@@ -42,11 +22,13 @@ function UsuarioReporte() {
       const res = await fetch(`http://localhost:3000/api/recolecciones?userId=${inputUserId}`);
       const data = await res.json();
 
-      if (data.length > 0) {
-        setUserName(data[0].usuario.name);
+      console.log("Datos recibidos:", data);
+
+      if (data.length > 0 && data[0].usuario) {
+        setUserName(data[0].usuario.name || "Sin nombre");
         setRecolecciones(data);
 
-        const total = data.reduce((acc, rec) => acc + rec.puntos, 0);
+        const total = data.reduce((acc, rec) => acc + (rec.puntos || 0), 0);
         setTotalPuntos(total);
       } else {
         setUserName("Usuario no encontrado");
@@ -55,12 +37,15 @@ function UsuarioReporte() {
       }
     } catch (error) {
       console.error("Error al cargar recolecciones:", error);
+      setUserName("Error al cargar datos");
+      setRecolecciones([]);
+      setTotalPuntos(0);
     }
   }
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [inputUserId]);
 
   function exportToExcel() {
     const formattedData = recolecciones.map((item) => ({
@@ -114,12 +99,12 @@ function UsuarioReporte() {
                 <p className="text-sm border px-2 py-1 rounded">{userName}</p>
               </div>
               <div className="flex space-x-2">
-              <button
-                className="text-sm bg-gray-300 px-3 py-1 rounded shadow cursor-pointer"
-                onClick={() => navigate(`/perfil/${inputUserId}`)}
-              >
-                PERFIL ✎
-              </button>
+                <button
+                  className="text-sm bg-gray-300 px-3 py-1 rounded shadow cursor-pointer"
+                  onClick={() => navigate(`/perfil/${inputUserId}`)}
+                >
+                  PERFIL ✎
+                </button>
                 <button className="text-sm bg-blue-300 px-3 py-1 rounded shadow">
                   SERVICIOS
                 </button>
@@ -190,6 +175,13 @@ function UsuarioReporte() {
                   <td>{rec.puntos}</td>
                 </tr>
               ))}
+              {recolecciones.length === 0 && (
+                <tr>
+                  <td colSpan={3} className="text-center py-4 text-gray-500">
+                    No hay recolecciones para mostrar
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
@@ -199,6 +191,7 @@ function UsuarioReporte() {
           <button
             className="bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 shadow"
             onClick={exportToExcel}
+            disabled={recolecciones.length === 0}
           >
             GENERAR REPORTE
           </button>
