@@ -9,8 +9,8 @@ const UserProfile = ({ user }) => {
     const navigate = useNavigate();
     
     const userActions = [
-        { label: "Mi perfil", onClick: () => console.log("Ver perfil") },
-        { label: "Mi reporte", onClick: () => console.log("Ver reporte") },
+        { label: "Mi perfil", onClick: () => navigate('/perfil')  },
+        { label: "Mi reporte", onClick: () => navigate('/reporte') , roles: [1] },
         { label: "Cerrar sesión", onClick: () => handleSignOut() },
     ];
 
@@ -55,9 +55,9 @@ const UserProfile = ({ user }) => {
 
             {/* Popup que se muestra si isPopupVisible es true */}
             {isPopupVisible && (
-                <div ref={popupRef} className="absolute top-16 right-4 bg-white border border-gray-300 rounded-lg shadow-lg">
+                <div ref={popupRef} className="absolute top-16 right-4 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
                     <ul className='py-4 w-46'>
-                        {userActions.map(action => (
+                        {userActions.filter(action => !action.roles || action.roles.includes(user.roleId)).map(action => (
                             <li key={action.label} className="cursor-pointer px-4 hover:bg-opaque-gray" onClick={action.onClick}>
                                 {action.label}
                             </li>

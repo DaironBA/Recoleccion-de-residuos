@@ -18,7 +18,7 @@ export class CreateUserDto {
     email: string;
 
     @IsNumber({}, {message: generateMessage(MessagesEnum.INVALID_NUMBER, {field: fieldsTranslation(TranslationsFilesEnum.USER_FIELDS, 'phone')})})
-    @IsNotEmpty({message: generateMessage(MessagesEnum.EMPTY_FIELD, {field: fieldsTranslation(TranslationsFilesEnum.USER_FIELDS, 'phone')})})
+    @IsOptional()
     phone: string;
 
     @IsString({message: generateMessage(MessagesEnum.INVALID_STRING, {field: fieldsTranslation(TranslationsFilesEnum.USER_FIELDS, 'password')})})
@@ -27,22 +27,18 @@ export class CreateUserDto {
     password: string;
 
     @IsNumber({}, {message: generateMessage(MessagesEnum.INVALID_NUMBER, {field: fieldsTranslation(TranslationsFilesEnum.USER_FIELDS, 'age')})})
-    @IsNotEmpty({message: generateMessage(MessagesEnum.EMPTY_FIELD, {field: fieldsTranslation(TranslationsFilesEnum.USER_FIELDS, 'age')})})
+    @IsOptional()
     age: number;
 
-    @IsNumber({}, {message: generateMessage(MessagesEnum.INVALID_NUMBER, {field: fieldsTranslation(TranslationsFilesEnum.USER_FIELDS, 'totalPoints')})})
-    @IsOptional()
-    totalPoints: number;
-
     @IsNumber({}, {message: generateMessage(MessagesEnum.INVALID_NUMBER, {field: fieldsTranslation(TranslationsFilesEnum.USER_FIELDS, 'documentNumber')})})
-    @IsNotEmpty({message: generateMessage(MessagesEnum.EMPTY_FIELD, {field: fieldsTranslation(TranslationsFilesEnum.USER_FIELDS, 'documentNumber')})})
+    @IsOptional()
     documentNumber: number;
 
     @IsNumber({}, {message: generateMessage(MessagesEnum.INVALID_FIELD, {field: fieldsTranslation(TranslationsFilesEnum.USER_FIELDS, 'documentType')})})
-    @IsNotEmpty({message: generateMessage(MessagesEnum.EMPTY_FIELD, {field: fieldsTranslation(TranslationsFilesEnum.USER_FIELDS, 'documentType')})})
+    @IsOptional()
     documentType: number;
 
     @IsNumber({}, {message: generateMessage(MessagesEnum.INVALID_FIELD, {field: fieldsTranslation(TranslationsFilesEnum.USER_FIELDS, 'roleId')})})
-    @IsNotEmpty({message: generateMessage(MessagesEnum.EMPTY_FIELD, {field: fieldsTranslation(TranslationsFilesEnum.USER_FIELDS, 'roleId')})})
+    @IsOptional()
     roleId: number;
 }

@@ -14,6 +14,26 @@ function UsuarioReporte() {
   const [recolecciones, setRecolecciones] = useState([]);
   const [totalPuntos, setTotalPuntos] = useState(0);
   const [userName, setUserName] = useState("User Name");
+  const user = useSelector((state) => state.user.user);
+
+  // Service
+  const recoleccionesService = new RecoleccionesService()
+
+
+  async function fetchData() {
+    try {
+      const data = await recoleccionesService.get(`?userId=${user.id}`);
+
+      if (data.length > 0) {
+        setUserName(data[0].usuario.name);
+        setRecolecciones(data);
+
+        const total = data.reduce((acc, rec) => acc + rec.puntos, 0);
+        setTotalPuntos(total);
+      }
+    } catch (error) {
+    }
+  }
 
   async function fetchData() {
     try {

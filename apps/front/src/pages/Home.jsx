@@ -1,7 +1,10 @@
 import Nav from "../components/Nav"
 import Footer from "../components/footer";
+import { changeTitle } from "../utils/changeTitle";
 
 function Home() {
+    changeTitle('Inicio | Recolección de Residuos');
+
     return (
         <>
             <Nav />

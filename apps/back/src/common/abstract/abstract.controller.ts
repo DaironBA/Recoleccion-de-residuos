@@ -3,11 +3,7 @@ import { AbstractEntity } from './abstract.entity';
 import { AbstractService } from './abstract.service';
 
 @Controller('/')
-export abstract class AbstractController<
-  T extends AbstractEntity,
-  CreateDto extends Partial<T>,
-  UpdateDto extends Partial<T>
-> {
+export abstract class AbstractController <T extends AbstractEntity, CreateDto extends Partial<T>, UpdateDto extends Partial<T>> {
   constructor(protected readonly abstractService: AbstractService<T, CreateDto, UpdateDto>) {}
 
   @Post()

@@ -47,7 +47,8 @@ class AbstractService {
         body: JSON.stringify(data),
       });
       if (!response.ok) {
-        throw new Error('Error en la respuesta POST');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error en la respuesta POST');
       }
       return await response.json();
     } catch (error) {

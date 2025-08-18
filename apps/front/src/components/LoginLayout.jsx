@@ -1,10 +1,10 @@
 function LoginLayout({children, image, imagePhrase}){
     return (
 // screen
-    <div className="min-h-screen min-w-screen flex justify-center items-center mb-8">
+    <div className="relative min-h-screen flex justify-center items-center mb-8">
 
       {/* content */}
-      <div className="fixed top-0 grid grid-cols-2 w-screen h-screen -z-10">
+      <div className="fixed top-0 grid grid-cols-2 w-full h-screen -z-10">
         <div className="bg-alternative-default md:bg-white"></div>
         <div className="bg-alternative-default"></div>
       </div>

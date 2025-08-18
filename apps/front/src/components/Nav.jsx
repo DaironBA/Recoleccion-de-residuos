@@ -4,7 +4,10 @@ import UserButton from "./UserButton";
 
 const navItems = [
   { path: "/", label: "Inicio" },
+  { path: "/actividad", label: "Actividad", roles: [1] },
+  { path: "/admin", label: "Administración", roles: [3] },
   { path: "/services", label: "Servicios" },
+  { path: "/rutas", label: "Rutas", roles: [2] },
   { path: "/about", label: "Sobre nosotros" },
   { path: "/contact", label: "Contáctenos" },
   { path: "/login", label: "Ingresar" },

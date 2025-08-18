@@ -2,7 +2,7 @@
   "id": "id",
   "name": "nombre",
   "address": "dirección",
-  "email": "correo electrónico",
+  "email": "email",
   "phone": "teléfono",
   "age": "edad",
   "password": "contraseña",
