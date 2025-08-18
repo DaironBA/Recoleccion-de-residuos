@@ -3,68 +3,61 @@ import { useNavigate } from "react-router-dom";
 import Img from "../components/Img";
 import { Link } from "react-router";
 import { Eye, EyeOff, Lock, User } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import LoginLayout from "../components/LoginLAyout";
 import AuthService from "../services/authService";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/actions/userActions";
 import Footer from "../components/footer";
 import Nav from "../components/Nav"
+import { changeTitle } from "../utils/changeTitle";
 
 function Login() {
   // Imports
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const authService = new AuthService();
+  changeTitle('Ingresar | Recolección de Residuos');
 
   // State
   const [showIcon, setShowIcon] = useState(EyeOff);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
 
   // Variables
   const image = <Img src="images/login.png" alt="Login" />;
 
   // Functions
 
-const validateForm = () => {
-    let isValid = true;
+  const validateForm = () => {
+    const emailValid = emailRef.current.isValid();
+    const passwordValid = passwordRef.current.isValid();
 
-    // Email Validation
-    if (!email) {
-      setEmailError("El correo electrónico es obligatorio.");
-      isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      setEmailError("Por favor, ingresa un correo electrónico válido.");
-      isValid = false;
-    } else {
-      setEmailError("");
+    if (!emailValid || !passwordValid) {
+      return false;
     }
-
-    // Password Validation
-    if (!password) {
-      setPasswordError("La contraseña es obligatoria.");
-      isValid = false;
-    } else if (password.length < 8) {
-      setPasswordError("La contraseña debe tener al menos 8 caracteres.");
-      isValid = false;
-    } else {
-      setPasswordError("");
-    }
-
-    return isValid;
+    return true;
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-    const user = await authService.login({ email: email, password: password });
-
+    const user = await authService.login({ email: emailRef.current.getValue(), password: passwordRef.current.getValue() });
     if (user) {
+      let routeToGo;
+      switch (user.roleId) {
+        case 1:
+          routeToGo = "/reporte";
+          break;
+        case 2:
+        case 3:
+          routeToGo = "/";
+          break;
+        default:
+          routeToGo = "/";
+      }
       dispatch(setUser(user));
-      navigate("/");
+      navigate(routeToGo);
     }else {
       console.log("Error al iniciar sesión");
     }
@@ -83,7 +76,8 @@ const validateForm = () => {
       <form className="flex flex-col pr-8" onSubmit={handleLogin}>
         <div className="flex flex-col gap-8">
           <div>
-            <InputText 
+            <InputText
+              ref={emailRef}
               type="email"
               label="Correo electrónico"
               id="email"
@@ -91,14 +85,13 @@ const validateForm = () => {
               placeholder="Ingrese su correo electrónico"
               startIcon={User}
               required={true}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              validations={['email']}
             />
-            {emailError && <p className="text-red-500 text-xs">{emailError}</p>}
           </div>
 
           <div>
-            <InputText 
+            <InputText
+              ref={passwordRef}
               type={showIcon === Eye ? "text" : "password"}
               label="Contraseña"
               id="password"
@@ -108,10 +101,8 @@ const validateForm = () => {
               endIcon={showIcon}
               onEndIconClick={handleEndIconClick}
               required={true}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              min={8}
             />
-            {passwordError && <p className="text-red-500 text-xs">{passwordError}</p>}
           </div>
         </div>
 
@@ -124,7 +115,7 @@ const validateForm = () => {
           </Link>
         </div>
 
-        <div className="max-w-60 w-[80%] pr-4 md:pr-0 mx-auto">
+        <div className="max-w-60 w-[80%] pr-4 md:pr-0 mx-auto pb-20 md:pb-0">
           <button type="submit" className="bg-black text-white text-xs py-4 mt-8 w-full cursor-pointer hover:bg-black/80">
             Iniciar sesión
           </button>

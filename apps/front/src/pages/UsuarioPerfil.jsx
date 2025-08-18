@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import Nav from "../components/Nav";
 import Footer from "../components/footer";
+import { useParams } from "react-router-dom";
 
-function UsuarioPerfil() {
+function UsuarioPerfil({ }) {
+   const { userId } = useParams();
   const [formData, setFormData] = useState({
     nombres: "",
     tipoDocumento: "",
@@ -14,66 +16,80 @@ function UsuarioPerfil() {
 
   const [totalPuntos, setTotalPuntos] = useState(0);
 
- useEffect(() => {
+  useEffect(() => {
+    if (!userId) return;
+
     const cargarDatos = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/users/1");
-        const data = await response.json();
+        const responseUser = await fetch(`http://localhost:3000/api/users/${userId}`);
+        const userData = await responseUser.json();
 
         setFormData({
-          nombres: data.name || "",
-          tipoDocumento: data.documentType?.toString() || "",
-          numeroDocumento: data.documentNumber?.toString() || "",
-          edad: data.age?.toString() || "",
-          telefono: data.phone || "",
-          correo: data.email || ""
+          nombres: userData.name || "",
+          tipoDocumento: userData.documentType?.toString() || "",
+          numeroDocumento: userData.documentNumber?.toString() || "",
+          edad: userData.age?.toString() || "",
+          telefono: userData.phone || "",
+          correo: userData.email || ""
         });
 
-        setTotalPuntos(data.totalPoints || 0);
+        const responseReco = await fetch(`http://localhost:3000/api/recolecciones?userId=${userId}`);
+        const recolecciones = await responseReco.json();
+
+        const total = recolecciones.reduce((acc, reco) => acc + (reco.puntos || 0), 0);
+        setTotalPuntos(total);
+
       } catch (error) {
         console.error("Error cargando datos del usuario:", error);
       }
     };
 
     cargarDatos();
-  }, []);
-
-/*
-  useEffect(() => {
-  const userId = localStorage.getItem("userId");
-
-  if (!userId) {
-    console.warn("Usuario no autenticado");
-    return;
-  }
-
-  fetch(`http://localhost:3000/api/users/${userId}`)
-    .then((res) => res.json())
-    .then((data) => {
-      setFormData({
-        nombres: data.name || "",
-        tipoDocumento: data.documentType?.toString() || "",
-        numeroDocumento: data.documentNumber?.toString() || "",
-        edad: data.age?.toString() || "",
-        telefono: data.phone || "",
-        correo: data.email || "",
-      });
-      setTotalPuntos(data.totalPoints || 0);
-    })
-    .catch((error) => {
-      console.error("Error cargando usuario:", error);
-    });
-}, []);
-
-*/
+  }, [userId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleGuardar = () => {
-    alert("Datos guardados:\n" + JSON.stringify(formData, null, 2));
+  const handleGuardar = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/users/${userId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.nombres,
+          documentType: parseInt(formData.tipoDocumento),
+          documentNumber: parseInt(formData.numeroDocumento),
+          age: parseInt(formData.edad),
+          phone: formData.telefono,
+          email: formData.correo,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Error al actualizar el usuario");
+
+      alert("✅ Usuario actualizado correctamente");
+    } catch (error) {
+      console.error("❌ Error al guardar:", error);
+      alert("❌ No se pudo guardar la información");
+    }
+  };
+
+  const handleEliminar = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/users/${userId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) throw new Error("Error al eliminar el usuario");
+
+      alert("🗑️ Usuario eliminado correctamente");
+      // Aquí podrías redirigir o limpiar sesión
+    } catch (error) {
+      console.error("❌ Error al eliminar:", error);
+      alert("❌ No se pudo eliminar el usuario");
+    }
   };
 
   return (
@@ -111,152 +127,153 @@ function UsuarioPerfil() {
         </div>
 
         {/* Formulario */}
-       
-          <div className="bg-gray-300 rounded-lg p-6 max-w-4xl mx-auto">
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4 items-center">
-              {/* Nombres */}
-              <label className="text-sm font-semibold bg-gray-200 px-3 py-2 rounded text-gray-700">
-                NOMBRES Y APELLIDOS
-              </label>
-              <div className="relative">
-                <input
-                  name="nombres"
-                  type="text"
-                  value={formData.nombres}
-                  onChange={handleChange}
-                  className="w-full p-2 rounded border border-gray-400 bg-gray-100 text-gray-700"
-                />
-                <button
-                  type="button"
-                  className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
-                  onClick={() => setFormData(prev => ({ ...prev, nombres: "" }))}
-                >
-                  ✖
-                </button>
-              </div>
-
-              {/* Tipo documento */}
-              <label className="text-sm font-semibold bg-gray-200 px-3 py-2 rounded text-gray-700">
-                TIPO DOCUMENTO
-              </label>
-              <div className="relative">
-                <input
-                  name="tipoDocumento"
-                  type="text"
-                  value={formData.tipoDocumento}
-                  onChange={handleChange}
-                  className="w-full p-2 rounded border border-gray-400 bg-gray-100 text-gray-700"
-                />
-                <button
-                  type="button"
-                  className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
-                  onClick={() => setFormData(prev => ({ ...prev, tipoDocumento: "" }))}
-                >
-                  ✖
-                </button>
-              </div>
-
-              {/* Número documento */}
-              <label className="text-sm font-semibold bg-gray-200 px-3 py-2 rounded text-gray-700">
-                NÚMERO DOCUMENTO
-              </label>
-              <div className="relative">
-                <input
-                  name="numeroDocumento"
-                  type="text"
-                  value={formData.numeroDocumento}
-                  onChange={handleChange}
-                  className="w-full p-2 rounded border border-gray-400 bg-gray-100 text-gray-700"
-                />
-                <button
-                  type="button"
-                  className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
-                  onClick={() => setFormData(prev => ({ ...prev, numeroDocumento: "" }))}
-                >
-                  ✖
-                </button>
-              </div>
-
-              {/* Edad */}
-              <label className="text-sm font-semibold bg-gray-200 px-3 py-2 rounded text-gray-700">
-                EDAD
-              </label>
-              <div className="relative">
-                <input
-                  name="edad"
-                  type="number"
-                  min={1}
-                  value={formData.edad}
-                  onChange={handleChange}
-                  className="w-full p-2 rounded border border-gray-400 bg-gray-100 text-gray-700"
-                />
-                <button
-                  type="button"
-                  className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
-                  onClick={() => setFormData(prev => ({ ...prev, edad: "" }))}
-                >
-                  ✖
-                </button>
-              </div>
-
-              {/* Teléfono */}
-              <label className="text-sm font-semibold bg-gray-200 px-3 py-2 rounded text-gray-700">
-                TELÉFONO
-              </label>
-              <div className="relative">
-                <input
-                  name="telefono"
-                  type="text"
-                  value={formData.telefono}
-                  onChange={handleChange}
-                  className="w-full p-2 rounded border border-gray-400 bg-gray-100 text-gray-700"
-                />
-                <button
-                  type="button"
-                  className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
-                  onClick={() => setFormData(prev => ({ ...prev, telefono: "" }))}
-                >
-                  ✖
-                </button>
-              </div>
-
-              {/* Correo */}
-              <label className="text-sm font-semibold bg-gray-200 px-3 py-2 rounded text-gray-700">
-                CORREO
-              </label>
-              <div className="relative">
-                <input
-                  name="correo"
-                  type="email"
-                  value={formData.correo}
-                  onChange={handleChange}
-                  className="w-full p-2 rounded border border-gray-400 bg-gray-100 text-gray-700"
-                />
-                <button
-                  type="button"
-                  className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
-                  onClick={() => setFormData(prev => ({ ...prev, correo: "" }))}
-                >
-                  ✖
-                </button>
-              </div>
+        <div className="bg-gray-300 rounded-lg p-6 max-w-4xl mx-auto">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-4 items-center">
+            {/* Nombres */}
+            <label className="text-sm font-semibold bg-gray-200 px-3 py-2 rounded text-gray-700">
+              NOMBRES Y APELLIDOS
+            </label>
+            <div className="relative">
+              <input
+                name="nombres"
+                type="text"
+                value={formData.nombres}
+                onChange={handleChange}
+                className="w-full p-2 rounded border border-gray-400 bg-gray-100 text-gray-700"
+              />
+              <button
+                type="button"
+                className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
+                onClick={() => setFormData(prev => ({ ...prev, nombres: "" }))}
+              >
+                ✖
+              </button>
             </div>
 
-            {/* Botones */}
-            <div className="flex justify-between mt-8">
-              <button className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition duration-300 flex items-center gap-2">
-                ELIMINAR MI CUENTA 🗑️
-              </button>
-
+            {/* Tipo documento */}
+            <label className="text-sm font-semibold bg-gray-200 px-3 py-2 rounded text-gray-700">
+              TIPO DOCUMENTO
+            </label>
+            <div className="relative">
+              <input
+                name="tipoDocumento"
+                type="text"
+                value={formData.tipoDocumento}
+                onChange={handleChange}
+                className="w-full p-2 rounded border border-gray-400 bg-gray-100 text-gray-700"
+              />
               <button
-                onClick={handleGuardar}
-                className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300"
+                type="button"
+                className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
+                onClick={() => setFormData(prev => ({ ...prev, tipoDocumento: "" }))}
               >
-                GUARDAR CAMBIOS 💾
+                ✖
+              </button>
+            </div>
+
+            {/* Número documento */}
+            <label className="text-sm font-semibold bg-gray-200 px-3 py-2 rounded text-gray-700">
+              NÚMERO DOCUMENTO
+            </label>
+            <div className="relative">
+              <input
+                name="numeroDocumento"
+                type="text"
+                value={formData.numeroDocumento}
+                onChange={handleChange}
+                className="w-full p-2 rounded border border-gray-400 bg-gray-100 text-gray-700"
+              />
+              <button
+                type="button"
+                className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
+                onClick={() => setFormData(prev => ({ ...prev, numeroDocumento: "" }))}
+              >
+                ✖
+              </button>
+            </div>
+
+            {/* Edad */}
+            <label className="text-sm font-semibold bg-gray-200 px-3 py-2 rounded text-gray-700">
+              EDAD
+            </label>
+            <div className="relative">
+              <input
+                name="edad"
+                type="number"
+                min={1}
+                value={formData.edad}
+                onChange={handleChange}
+                className="w-full p-2 rounded border border-gray-400 bg-gray-100 text-gray-700"
+              />
+              <button
+                type="button"
+                className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
+                onClick={() => setFormData(prev => ({ ...prev, edad: "" }))}
+              >
+                ✖
+              </button>
+            </div>
+
+            {/* Teléfono */}
+            <label className="text-sm font-semibold bg-gray-200 px-3 py-2 rounded text-gray-700">
+              TELÉFONO
+            </label>
+            <div className="relative">
+              <input
+                name="telefono"
+                type="text"
+                value={formData.telefono}
+                onChange={handleChange}
+                className="w-full p-2 rounded border border-gray-400 bg-gray-100 text-gray-700"
+              />
+              <button
+                type="button"
+                className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
+                onClick={() => setFormData(prev => ({ ...prev, telefono: "" }))}
+              >
+                ✖
+              </button>
+            </div>
+
+            {/* Correo */}
+            <label className="text-sm font-semibold bg-gray-200 px-3 py-2 rounded text-gray-700">
+              CORREO
+            </label>
+            <div className="relative">
+              <input
+                name="correo"
+                type="email"
+                value={formData.correo}
+                onChange={handleChange}
+                className="w-full p-2 rounded border border-gray-400 bg-gray-100 text-gray-700"
+              />
+              <button
+                type="button"
+                className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
+                onClick={() => setFormData(prev => ({ ...prev, correo: "" }))}
+              >
+                ✖
               </button>
             </div>
           </div>
 
+          {/* Botones */}
+          <div className="flex justify-between mt-8">
+            <button
+              onClick={handleEliminar}
+              className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition duration-300 flex items-center gap-2"
+            >
+              ELIMINAR MI CUENTA 🗑️
+            </button>
+
+            <button
+              onClick={handleGuardar}
+              className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300"
+            >
+              GUARDAR CAMBIOS 💾
+            </button>
+          </div>
+        </div>
       </div>
       <Footer />
     </>

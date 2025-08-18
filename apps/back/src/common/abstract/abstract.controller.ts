@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, HttpCode, Query } from '@nestjs/common';
 import { AbstractEntity } from './abstract.entity';
 import { AbstractService } from './abstract.service';
 
@@ -7,8 +7,8 @@ export abstract class AbstractController <T extends AbstractEntity, CreateDto ex
   constructor(protected readonly abstractService: AbstractService<T, CreateDto, UpdateDto>) {}
 
   @Post()
-  create(@Body() createUserDto: CreateDto) {
-    return this.abstractService.create(createUserDto);
+  create(@Body() createDto: CreateDto) {
+    return this.abstractService.create(createDto);
   }
 
   @Get()
@@ -21,9 +21,9 @@ export abstract class AbstractController <T extends AbstractEntity, CreateDto ex
     return this.abstractService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateDto) {
-    return this.abstractService.update(+id, updateUserDto);
+  @Put(':id')
+  update(@Param('id') id: string, @Body() updateDto: UpdateDto) {
+    return this.abstractService.update(+id, updateDto);
   }
 
   @Delete(':id')

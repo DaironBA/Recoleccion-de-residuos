@@ -16,10 +16,10 @@ export class User extends AbstractEntity {
     @Column()
     email: string;
 
-    @Column()
+    @Column({nullable: true})
     phone: string;
 
-    @Column({ type: 'numeric' })
+    @Column({ type: 'numeric', nullable: true })
     age: number;
 
     @Exclude()
@@ -29,7 +29,7 @@ export class User extends AbstractEntity {
     @Column({ type: 'numeric', default: 0 })
     totalPoints: number;
 
-    @Column({ nullable: false })
+    @Column({ nullable: true })
     documentNumber: number;
 
     @Column({ type: 'smallint', default: 1 })

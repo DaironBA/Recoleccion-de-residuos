@@ -5,6 +5,7 @@ import { UsersModule } from './users/users/users.module';
 import { SnakeNamingStrategy } from './common/helpers/snake-naming-strategy';
 import { AuthModule } from './auth/auth.module';
 import { RecoleccionesModule } from './recolecciones/recolecciones.module';
+import { RoleModule } from './users/roles/role.module';
 @Module({
   imports: [
     
@@ -26,6 +27,7 @@ import { RecoleccionesModule } from './recolecciones/recolecciones.module';
     }),
     UsersModule,
     AuthModule,
+    RoleModule,
     RecoleccionesModule,
   ],
   controllers: [],

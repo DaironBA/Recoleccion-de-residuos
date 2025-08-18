@@ -3,24 +3,94 @@ import LoginLayout from "../components/LoginLAyout";
 import Footer from "../components/footer";
 import Nav from "../components/Nav";
 import InputText from "../components/InputText";
-import { Link } from "react-router";
-import { useState } from "react";
+import { Link, Navigate, useNavigate } from "react-router";
+import { useRef, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { changeTitle } from "../utils/changeTitle";
+import UserService from "../services/userService";
+import Alert from "../components/alert";
 
 function Register() {
   const registerImage = <Img src="images/register.png" alt="Register" />;
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
+
+  // States
   const [passwordIcon, setPasswordIcon] = useState(EyeOff);
   const [confirmPasswordIcon, setConfirmPasswordIcon] = useState(EyeOff);
+  const [globalError, setGlobalError] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
+  const [message, setMessage] = useState('');
+  const [alertType, setAlertType] = useState('info');
+  const [onCloseAlert, setOnCloseAlert] = useState(() => () => setShowAlert(false));
 
+
+  // Ref
+  const nameRef = useRef(null);
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+  const confirmPasswordRef = useRef(null);
+
+  // Services
+  const userService = new UserService();
+
+  changeTitle('Registrarse | Recolección de Residuos');
+
+  // functions
   const handleEndIconClick = (field) => {
     if (field === "password") {
       setPasswordIcon(passwordIcon === EyeOff ? Eye : EyeOff);
     } else if (field === "confirmPassword") {
       setConfirmPasswordIcon(confirmPasswordIcon === EyeOff ? Eye : EyeOff);
+    }
+  };
+
+  const handleShowAlert = (msg, type) => {
+    setMessage(msg); 
+    setAlertType(type);
+    setShowAlert(true);
+  };
+
+  const handleCloseAlert = () => {
+    setShowAlert(false);
+  };
+
+  const validateForm = () => {
+    const nameValid = nameRef.current.isValid();
+    const emailValid = emailRef.current.isValid();
+    const passwordValid = passwordRef.current.isValid();
+    const confirmPasswordValid = confirmPasswordRef.current.isValid();
+
+    if (passwordRef.current.getValue() !== confirmPasswordRef.current.getValue()) {
+      setGlobalError("Las contraseñas no coinciden");
+      return false;
+    }else{
+      setGlobalError("");
+    }
+
+    if (!nameValid || !emailValid || !passwordValid || !confirmPasswordValid) {
+      return false;
+    }
+    return true;
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    try{
+      await userService.post('', {
+        name: nameRef.current.getValue(),
+        email: emailRef.current.getValue(),
+        password: passwordRef.current.getValue(),
+        confirmPassword: confirmPasswordRef.current.getValue()
+      });
+      setOnCloseAlert(() => () => {
+        navigate("/login");
+        setShowAlert(false);
+      });
+      handleShowAlert("Usuario registrado correctamente, ya puede iniciar sesión", "success");
+    }catch(error){
+      setGlobalError(error.message || "Error al registrar el usuario");
     }
   };
 
@@ -34,56 +104,61 @@ function Register() {
         <h1 className="text-3xl font-bold text-center mb-10">
           Registro de usuario
         </h1>
-         <form className="flex flex-col pr-8">
+         <form className="flex flex-col pr-8" onSubmit={handleRegister}>
             <div className="flex flex-col gap-6">
               <div>
                 <InputText
+                  ref={nameRef}
                   label="Nombre completo"
                   id="text"
                   name="text"
                   placeholder="Ingrese su nombre"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  required={true}
                 />
               </div>
               <div>
                 <InputText
+                  ref={emailRef}
+                  type="email"
                   label="E-mail"
                   id="email"
                   name="email"
                   placeholder="Ingrese su e-mail"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  required={true}
+                  validations={['email']}
                 />
               </div>
               <div>
-              <InputText 
+              <InputText
+                ref={passwordRef}
                 type={passwordIcon === Eye ? "text" : "password"}
                 label="Contraseña"
                 id="password"
                 name="password"
                 placeholder="Ingrese su contraseña"
+                required={true}
                 endIcon={passwordIcon}
                 onEndIconClick={() => handleEndIconClick('password')}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                min={8}
               />
               </div>
               <div>
-              <InputText 
+              <InputText
+                ref={confirmPasswordRef}
                 type={confirmPasswordIcon === Eye ? "text" : "password"}
                 label="Confirmar contraseña"
                 id="confirmPassword"
                 name="confirmPassword"
                 placeholder="Confirmar contraseña"
+                required={true}
                 endIcon={confirmPasswordIcon}
                 onEndIconClick={() => handleEndIconClick('confirmPassword')}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                min={8}
               />
               </div>
              
             </div>
+            {globalError && <p className="text-red-500 text-xs">{globalError}</p>}
 
             <div className="mt-4">
               <Link to="/login">
@@ -97,6 +172,7 @@ function Register() {
               </button>
             </div>
           </form>
+      <Alert message={message} onClose={handleCloseAlert} show={showAlert} type={alertType} onClose={onCloseAlert} />
       </LoginLayout>
       <Footer />
     </>
