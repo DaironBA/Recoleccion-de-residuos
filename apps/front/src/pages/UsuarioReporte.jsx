@@ -148,12 +148,7 @@ function UsuarioReporte() {
               placeholder="Ej. 2"
               onWheel={(e) => e.target.blur()} // Previene scroll accidental
             />
-            <button
-              onClick={fetchData}
-              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
-            >
-              CARGAR REPORTE
-            </button>
+            
           </div>
         </div>
 
