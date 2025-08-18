@@ -15,10 +15,11 @@ function About() {
           <div className="absolute inset-0 bg-white opacity-70"></div>
           <div className="relative container mx-auto px-4 z-10">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4">
-              Un Futuro Sostenible Empieza Hoy
+              Sobre Nosotros
             </h1>
             <p className="text-lg md:text-xl max-w-2xl mx-auto mb-8">
-              Conoce nuestra misión, valores y el equipo detrás de este proyecto.
+              Somos una empresa dedicada a transformar la gestión de residuos domésticos, haciendo del reciclaje un hábito sencillo, accesible y gratificante para todos.
+.
             </p>
           </div>
         </div>
@@ -26,14 +27,11 @@ function About() {
         {/* Misión y Valores */}
         <div className="py-20 bg-gray-100">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Nuestra Historia y Misión</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Nuestra Misión</h2>
             <div className="flex flex-col lg:flex-row items-center lg:items-start gap-12">
               <div className="lg:w-1/2">
                 <p className="text-lg text-gray-600 mb-6">
-                  Nacimos de la necesidad de hacer el reciclaje más accesible y gratificante para todos. En un mundo donde la crisis ambiental es cada vez más evidente, creemos que pequeñas acciones cotidianas pueden generar un impacto monumental.
-                </p>
-                <p className="text-lg text-gray-600">
-                  Nuestra misión es empoderar a las comunidades para que se conviertan en agentes de cambio, proporcionando una plataforma intuitiva y eficiente que conecta a los hogares con un servicio de recolección de residuos responsable y confiable.
+                  Nuestra misión es empoderar a las comunidades para que participen activamente en la sostenibilidad ambiental. Mediante nuestro servicio de recolección especializado, facilitamos la separación y el tratamiento adecuado de residuos orgánicos, inorgánicos y peligrosos, contribuyendo a un planeta más verde y limpio.
                 </p>
               </div>
               <div className="lg:w-1/2 grid grid-cols-1 md:grid-cols-2 gap-8">
