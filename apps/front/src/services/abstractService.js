@@ -24,9 +24,10 @@ class AbstractService {
         return headers;
     }
 
-  async get(endpoint = '') {
+  async get(endpoint = '', params = {}) {
     try {
-      const response = await fetch(`${this.baseUrl}${endpoint}`, {
+      const queryParams = new URLSearchParams(params).toString();
+      const response = await fetch(`${this.baseUrl}${endpoint}?${queryParams}`, {
         headers: this.getHeaders(),
       });
       if (!response.ok) {

@@ -2,14 +2,19 @@ import { useState, useEffect } from "react";
 import Nav from "../components/Nav";
 import Footer from "../components/footer";
 import { useSelector } from "react-redux";
+import CollectionRequest from "../components/CollectionRequest";
+import { wasteTypeEnum } from "../enums/wasteType.enum";
 
 function UsuarioActividad() {
 
   const user = useSelector((state) => state.user.user);
- 
+  
   const [puntos, setPuntos] = useState(0);
   const [recolecciones, setRecolecciones] = useState(0);
   const [kilos, setKilos] = useState(0);
+  const [showCollectionModal, setShowCollectionModal] = useState(false);
+  const [wasteType, setWasteType] = useState(null);
+
   const [proximasFechas, setProximasFechas] = useState({
     organicos: "",
     inorganicos: "",
@@ -28,6 +33,11 @@ function UsuarioActividad() {
       peligrosos: "Lunes, 27 de Noviembre",
     });
   }, [user]);
+
+  const handleOpenCollectionModal = (type) => {
+    setWasteType(type);
+    setShowCollectionModal(true);
+  };
 
   return (
     <>
@@ -75,10 +85,10 @@ function UsuarioActividad() {
           <div className="border rounded p-4">
             <h3 className="font-semibold mb-4">Solicitar nueva recolección</h3>
             <div className="flex gap-4 mb-4">
-              <button className="bg-black text-white py-2 px-6 rounded cursor-pointer hover:opacity-90 transition">
+              <button onClick={() => handleOpenCollectionModal(wasteTypeEnum.RECICLABLE)} className="bg-black text-white py-2 px-6 rounded cursor-pointer hover:opacity-90 transition">
                 Inorgánicos
               </button>
-              <button className="bg-black text-white py-2 px-6 rounded cursor-pointer hover:opacity-90 transition">
+              <button onClick={() => handleOpenCollectionModal(wasteTypeEnum.PELIGROSO)} className="bg-black text-white py-2 px-6 rounded cursor-pointer hover:opacity-90 transition">
                 Peligrosos
               </button>
             </div>
@@ -98,7 +108,7 @@ function UsuarioActividad() {
           </div>
         </div>
       </div>
-
+      <CollectionRequest show={showCollectionModal} wasteType={wasteType} onClose={() => setShowCollectionModal(false)} />
       <Footer />
     </>
   );

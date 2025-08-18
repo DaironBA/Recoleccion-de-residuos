@@ -1,6 +1,6 @@
 import { forwardRef, useImperativeHandle, useState } from "react";
 
-const InputText = forwardRef(({ className, required, validations, max, min, ...props }, ref) => {
+const InputText = forwardRef(({ className, required, validations, max, min, mdate, ...props }, ref) => {
     // Validations = ['email']
     const [isFocused, setIsFocused] = useState(false);
     const [error, setError] = useState("");
@@ -66,10 +66,11 @@ const InputText = forwardRef(({ className, required, validations, max, min, ...p
     useImperativeHandle(ref, () => ({
         isValid: () => runValidation(value),
         getValue: () => value,
+        setValue: (val) => setValue(val),
     }));
     return (
         <div className={`flex flex-col gap-2 ${className}`}>
-            <label htmlFor={props.id} className="block text-sm font-semibold">{props.label}{props.required && <span >*</span>} </label>
+            <label htmlFor={props.id} className="block text-sm font-semibold">{props.label}{required && <span >*</span>} </label>
             <div className={`relative flex items-center border border-gray-300 rounded-xl w-full h-10 overflow-hidden ${isFocused ? 'border-gray-700 outline-none' : 'border-gray-300'}`}>
                 {/* Ícono al inicio */}
                 {props.startIcon && <props.startIcon className={`absolute left-2 text-gray-700 aspect-square h-full mr-2 ${props.onStartIconClick ? 'cursor-pointer' : ''}`} onClick={props.onStartIconClick} />}
@@ -78,6 +79,7 @@ const InputText = forwardRef(({ className, required, validations, max, min, ...p
                     type={props.type ?? 'text'}
                     id={props.id}
                     name={props.name}
+                    value={value}
                     placeholder={props.placeholder}
                     required={required}
                     onFocus={handleFocus}  // Cuando el input obtiene el foco
@@ -85,6 +87,7 @@ const InputText = forwardRef(({ className, required, validations, max, min, ...p
                     onChange={handleChange}
                     {...(max ? { maxLength: max } : {})}
                     {...(min ? { minLength: min } : {})}
+                    {...(mdate ? { min: mdate } : {})}
                 />
                 {props.endIcon && <props.endIcon className={`absolute right-2 text-gray-700 aspect-square h-full ml-2 ${props.onEndIconClick ? 'cursor-pointer' : ''}`} onClick={props.onEndIconClick} />}
                 {max && (

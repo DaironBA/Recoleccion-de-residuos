@@ -19,13 +19,16 @@ const useAuth = () => {
             localStorage.removeItem('authToken');
             dispatch(logoutUser());
           }else {
-            const user = await userService.get(`/${decodedToken.id}`)
+            const user = (await userService.get('', {
+              id: decodedToken.id,
+              relations: ['recolecciones']
+            }))[0]
             dispatch(setUser(user));
           }
         } catch (error) {
         }
       }else {
-
+        dispatch(logoutUser());
       }
     };
 

@@ -9,6 +9,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { changeTitle } from "../utils/changeTitle";
 import UserService from "../services/userService";
 import Alert from "../components/alert";
+import BlackButton from "../components/BlackButton";
 
 function Register() {
   const registerImage = <Img src="images/register.png" alt="Register" />;
@@ -167,9 +168,7 @@ function Register() {
             </div>
 
             <div className="max-w-60 w-[80%] pr-4 md:pr-0 mx-auto">
-              <button type="submit" className="bg-black text-white text-xs py-4 mt-8 w-full cursor-pointer hover:bg-black/80">
-                Registrate
-              </button>
+              <BlackButton text="Registrarse" />
             </div>
           </form>
       <Alert message={message} onClose={handleCloseAlert} show={showAlert} type={alertType} />

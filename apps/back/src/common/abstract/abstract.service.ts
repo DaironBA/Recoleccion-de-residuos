@@ -25,7 +25,12 @@ export abstract class AbstractService<
   // Obtener todos los registros
   async findAll(params: any): Promise<T[]> {
     const filters = this.buildFilters(params);
-    return this.repository.find({ where: filters });
+    let relations = [];
+    if (filters['relations']){
+      relations = filters['relations'].split(',');
+      delete filters['relations'];
+    }
+    return this.repository.find({ where: filters, relations: relations });
   }
 
   buildFilters(params: any): any {

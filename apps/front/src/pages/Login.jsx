@@ -6,19 +6,26 @@ import { Eye, EyeOff, Lock, User } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import LoginLayout from "../components/LoginLAyout";
 import AuthService from "../services/authService";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../redux/actions/userActions";
 import Footer from "../components/footer";
 import Nav from "../components/Nav"
 import { changeTitle } from "../utils/changeTitle";
+import BlackButton from "../components/BlackButton";
 
 function Login() {
+
   // Imports
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const authService = new AuthService();
   changeTitle('Ingresar | Recolección de Residuos');
 
+  const user = useSelector((state) => state.user.user);
+
+  if (user) {
+    navigate("/");
+  }
   // State
   const [showIcon, setShowIcon] = useState(EyeOff);
   const emailRef = useRef(null);
@@ -116,9 +123,7 @@ function Login() {
         </div>
 
         <div className="max-w-60 w-[80%] pr-4 md:pr-0 mx-auto pb-20 md:pb-0">
-          <button type="submit" className="bg-black text-white text-xs py-4 mt-8 w-full cursor-pointer hover:bg-black/80">
-            Iniciar sesión
-          </button>
+          <BlackButton text="Iniciar sesión" />
         </div>
       </form>
     </LoginLayout>

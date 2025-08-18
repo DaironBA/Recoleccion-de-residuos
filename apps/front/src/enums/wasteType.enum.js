@@ -1,4 +1,4 @@
-export const wasteType = {
+export const wasteTypeEnum = {
     ORGANICO: 1,
     PELIGROSO: 2,
     RECICLABLE: 3
