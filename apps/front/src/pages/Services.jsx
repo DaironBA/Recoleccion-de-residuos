@@ -26,14 +26,13 @@ function Services() {
           </div>
         </div>
 
-        {/* Sección de Tarjetas de Servicios */}
+        {/* Sección Servicios */}
         <div className="py-20 bg-gray-100">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Soluciones para Todos</h2>
             <p className="text-lg text-gray-600 mb-12 max-w-3xl mx-auto">
               Descubre nuestros servicios de recolección y elige el que mejor se adapte a ti o a tu organización.
             </p>
-            {/* Se cambia la clase a lg:grid-cols-4 para 4 columnas en pantallas grandes */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {/* Tarjeta 1: Residuos Orgánicos */}
               <div className="bg-white p-6 rounded-lg shadow-lg transform hover:scale-105 transition duration-300">
